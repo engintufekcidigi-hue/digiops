@@ -1252,8 +1252,8 @@ window.addEventListener('load', function(){
 (function(){
   fetch('DigiOps_Data.json')
     .then(function(r){ return r.json(); })
-    .then(function(d){ 
-      setTimeout(function(){ initData(d,'GitHub Yedek'); }, 500);
+    .then(function(d){
+      setTimeout(function(){ initData(d,'Yedek'); }, 500);
     })
     .catch(function(e){ console.warn('Veri yuklenemedi:',e); });
 })();
