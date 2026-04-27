@@ -712,10 +712,9 @@ function renderDash(){
 // ═══════════════════════════════════════
 function renderNobet(date){
   selDate = date;
-  // Week strip — 7 gün öncesi, 21 gün sonrası
-  const start = new Date(date); start.setDate(date.getDate()-7);
+  const start = new Date(NOW); start.setDate(NOW.getDate()-3);
   const W = document.getElementById('wstrip'); W.innerHTML='';
-  for(let i=0;i<28;i++){
+  for(let i=0;i<14;i++){
     const d = new Date(start); d.setDate(start.getDate()+i);
     const isT = isoDate(d)===isoDate(NOW);
     const isS = isoDate(d)===isoDate(date);
@@ -725,7 +724,6 @@ function renderNobet(date){
     el.onclick=(()=>{const dd=new Date(d);return()=>renderNobet(dd)})();
     W.appendChild(el);
   }
-  // Bugün çipini ortala
   setTimeout(()=>{
     const todayChip = W.querySelector('.today');
     if(todayChip) todayChip.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
