@@ -726,7 +726,10 @@ function renderNobet(date){
     W.appendChild(el);
   }
   // Bugün çipini ortala
-  setTimeout(()=>W.children[7]?.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}),60);
+  setTimeout(()=>{
+    const todayChip = W.querySelector('.today');
+    if(todayChip) todayChip.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+  },100);
 
   const shifts = shiftsFor(date);
   const active = shifts.filter(s=>s.shift!=='off').length;
