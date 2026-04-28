@@ -501,6 +501,7 @@ const SHIFT_TIME= {morning:'07:00–15:00',afternoon:'15:00–23:00',night:'23:0
 //  STATE
 // ═══════════════════════════════════════
 const NOW = new Date();
+function getToday(){ return new Date(); }
 let DB = {nobet:null,izinler:[],talepler:[],personel:[],notes:[],todos:[],reminders:[]};
 let izFlt='tumu', talFlt='tumu', persFlt='tumu';
 let isDark = localStorage.getItem('theme')==='dark';
@@ -524,7 +525,7 @@ applyTheme();
 setTimeout(()=>{ const s=document.getElementById('splash'); s.classList.add('hide'); setTimeout(()=>s.remove(),500); },1500);
 function tick(){ document.getElementById('htime').textContent = String(new Date().getHours()).padStart(2,'0')+':'+String(new Date().getMinutes()).padStart(2,'0'); }
 tick(); setInterval(tick,10000);
-document.getElementById('hdate').textContent = NOW.toLocaleDateString('tr-TR',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
+document.getElementById('hdate').textContent = getToday().toLocaleDateString('tr-TR',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
 window.addEventListener('scroll',()=>document.getElementById('stb').classList.toggle('on',window.scrollY>200));
 
 // ═══════════════════════════════════════
@@ -600,7 +601,7 @@ function initData(json,fname){
   document.getElementById('nav').style.display='flex';
 
   toast('✅ '+fname+' yüklendi');
-  renderDash(); renderNobet(NOW); renderIzin(); renderTalep(); renderNotlar(); renderPers();
+  renderDash(); renderNobet(getToday()); renderIzin(); renderTalep(); renderNotlar(); renderPers();
   go('dash');
 }
 
@@ -614,7 +615,7 @@ function weekIdx(d){
   const dd = new Date(d.getFullYear(),d.getMonth(),d.getDate());
   return Math.floor((dd - base) / (7*86400000));
 }
-function jsDay(d){ return d.getDay(); } // 0=Sun,1=Mon...6=Sat
+function jsDay(d){ return (d.getDay()+6)%7; } // Mac sistemi: Mon=0,Tue=1...Sun=6
 
 function shiftsFor(date){
   if(!DB.nobet||!DB.nobet.sched) return [];
@@ -637,8 +638,8 @@ function shiftsFor(date){
 //  DASHBOARD
 // ═══════════════════════════════════════
 function renderDash(){
-  const shifts = shiftsFor(NOW);
-  const td = isoDate(NOW);
+  const TODAY=getToday(); const shifts = shiftsFor(TODAY);
+  const td = isoDate(TODAY);
 
   // Bugün izinli kişi seti — izin kaydı varsa görevde sayılmaz
   const izBugList = DB.izinler.filter(i=>{
@@ -1250,14 +1251,10 @@ window.addEventListener('load', function(){
 
 <!-- EMBED_START -->
 <script>
-(function(){
-  fetch('DigiOps_Data.json')
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      setTimeout(function(){ initData(d,'Yedek'); }, 500);
-    })
-    .catch(function(e){ console.warn('Veri yuklenemedi:',e); });
-})();
+fetch('DigiOps_Data.json?v=' + new Date().toISOString().slice(0,10))
+  .then(function(r){ return r.json(); })
+  .then(function(d){ setTimeout(function(){ initData(d,'Yedek'); }, 500); })
+  .catch(function(e){ console.warn(e); });
 </script>
 <!-- EMBED_END -->
 </body>
