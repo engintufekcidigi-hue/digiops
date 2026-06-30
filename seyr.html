@@ -300,7 +300,19 @@
 
   <!-- SURELER -->
   <section class="panel" id="panel-sureler">
-    <div class="page-head"><div class="eyebrow">Kur'an-ı Kerim</div><h2>Kısa Sûreler</h2></div>
+    <div class="page-head"><div class="eyebrow">Kur'an-ı Kerim</div><h2>Sûreler</h2></div>
+
+    <div class="grp-title">Fihrist — Sure ve Ayet Bul</div>
+    <div class="card">
+      <select class="esma-search" id="fihristSurah" onchange="onFihristSurahChange()" style="margin-bottom:10px;"></select>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <input class="esma-search" id="fihristAyah" type="number" min="1" value="1" style="margin-bottom:0; flex:1;">
+        <button class="locate-btn" style="width:auto; padding:11px 20px; white-space:nowrap;" onclick="lookupFihrist()">Göster</button>
+      </div>
+      <div id="fihristResult"></div>
+    </div>
+
+    <div class="grp-title">Namazda Okunan Kısa Sûreler</div>
     <div class="card namaz-intro">Namazda Fâtiha'dan sonra (ilk iki rekatta) okunabilecek kısa sûrelerden bazıları, mealiyle.</div>
     <div id="kisaSureler"></div>
   </section>
@@ -682,6 +694,46 @@ async function upgradeFeedWithLiveContent(type){
         <button class="more-btn" id="completeBtn" onclick="completeFeedToday()" style="margin-top:10px;">Bugünü tamamladım</button>
       </div>`;
   updateFeedStreakLabel();
+}
+
+/* ---------- fihrist: sure/ayet bul ---------- */
+function renderFihristSelect(){
+  const sel = document.getElementById('fihristSurah');
+  if(!sel) return;
+  sel.innerHTML = SURAH_NAMES_TR.map((name,i)=>
+    `<option value="${i+1}">${i+1}. ${name} (${SURAH_AYAH_COUNTS[i]} âyet)</option>`
+  ).join('');
+  onFihristSurahChange();
+}
+function onFihristSurahChange(){
+  const surah = parseInt(document.getElementById('fihristSurah').value, 10);
+  const max = SURAH_AYAH_COUNTS[surah-1];
+  const ayahInput = document.getElementById('fihristAyah');
+  ayahInput.max = max;
+  if(parseInt(ayahInput.value,10) > max || !ayahInput.value) ayahInput.value = 1;
+}
+async function lookupFihrist(){
+  const surah = parseInt(document.getElementById('fihristSurah').value, 10);
+  const max = SURAH_AYAH_COUNTS[surah-1];
+  let ayah = parseInt(document.getElementById('fihristAyah').value, 10);
+  const resultEl = document.getElementById('fihristResult');
+  if(!ayah || ayah < 1) ayah = 1;
+  if(ayah > max){
+    resultEl.innerHTML = `<div class="namaz-intro" style="margin-top:12px;">${SURAH_NAMES_TR[surah-1]} Sûresi toplam ${max} âyettir. Lütfen 1–${max} arasında bir sayı gir.</div>`;
+    return;
+  }
+  resultEl.innerHTML = `<div class="namaz-intro" style="margin-top:12px;">Yükleniyor…</div>`;
+  try{
+    const url = `https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/tur-diyanetisleri/${surah}/${ayah}.json`;
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('bulunamadı');
+    const data = await res.json();
+    if(!data || !data.text) throw new Error('boş');
+    const item = { type:'ayet', body:data.text, ref:SURAH_NAMES_TR[surah-1]+' Sûresi, '+ayah, key:'live_ayet_'+surah+'_'+ayah };
+    resultEl.innerHTML = `<div style="margin-top:14px;">${feedCardHtml(item, item.key)}</div>`;
+  }catch(e){
+    resultEl.innerHTML = `<div class="namaz-intro" style="margin-top:12px;">Âyet getirilemedi. İnternet bağlantını kontrol edip tekrar dene.</div>`;
+  }
 }
 let currentFeedType = 'ayet';
 function switchFeedType(type){
@@ -1189,6 +1241,7 @@ safeInit('renderEsmaToday', renderEsmaToday);
 safeInit('renderEsmaList', renderEsmaList);
 safeInit('renderNamaz', renderNamaz);
 safeInit('renderKisaSureler', renderKisaSureler);
+safeInit('renderFihristSelect', renderFihristSelect);
 safeInit('renderZikir', renderZikir);
 safeInit('renderZikirHistory', renderZikirHistory);
 safeInit('renderFavorites', renderFavorites);
