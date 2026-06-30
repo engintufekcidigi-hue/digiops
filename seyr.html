@@ -2,6 +2,15 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
+<script>
+  (function(){
+    try{
+      var t = localStorage.getItem('seyr_theme');
+      if(!t) t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    }catch(e){}
+  })();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -17,17 +26,39 @@
     --gold:#B68A3D; --gold-soft:#8C6A2E; --sage:#7C9473; --sage-dark:#4F6149;
     --ink:#2B3328; --ink-dim:#7C8474; --line:#E3DCC8; --ember:#C0703F; --radius:20px;
   }
+  :root[data-theme="dark"]{
+    --bg:#141C17; --bg-soft:#1A2620; --card:#1F2D25; --card-hi:#263628;
+    --gold:#D9B36C; --gold-soft:#C9A24B; --sage:#8FAE82; --sage-dark:#A8C79A;
+    --ink:#EAE6DA; --ink-dim:#92A092; --line:#2C3B30; --ember:#E0935F;
+  }
+  :root[data-theme="dark"] .hero{ background:linear-gradient(160deg, #263628 0%, #1F2D25 60%, #18231D 100%); }
+  :root[data-theme="dark"] .feed-card.t-ayet{ background:linear-gradient(165deg, #2A3B2C, #1F2D23); color:var(--sage-dark); }
+  :root[data-theme="dark"] .feed-card.t-hadis{ background:linear-gradient(165deg, #382F1E, #2A2316); color:var(--gold); }
+  :root[data-theme="dark"] .feed-card.t-terim{ background:linear-gradient(165deg, #2E2837, #221D2A); color:#C9AED9; }
+  :root[data-theme="dark"] .esma-today{ background:linear-gradient(160deg, #263628, #1F2D25); }
+  :root[data-theme="dark"] .bm-card{ background:linear-gradient(160deg, #263628, #1F2D25); }
+  :root[data-theme="dark"] .vakit-item.active{ background:linear-gradient(160deg, #263628, #1F2D25); }
+  :root[data-theme="dark"] nav.tabs{ background:rgba(20,28,23,0.94); }
+  :root[data-theme="dark"] .theme-btn .icon{ color:var(--gold); }
+  :root[data-theme="dark"] .feed-card .fav{ background:rgba(0,0,0,0.25); }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{height:100%;}
   body{
     margin:0; background:var(--bg); color:var(--ink);
     font-family:'Vazirmatn', system-ui, sans-serif;
-    min-height:100vh; padding-bottom:195px; position:relative; overflow-x:hidden;
+    min-height:100vh; padding-bottom:230px; position:relative; overflow-x:hidden;
   }
   .wrap{max-width:520px; margin:0 auto; padding:0 18px;}
-  .brand-bar{ display:flex; align-items:baseline; gap:8px; padding:16px 0 0; }
+  .brand-bar{ padding:16px 0 0; }
+  .brand-row{ display:flex; align-items:baseline; gap:8px; }
   .brand-bar .bname{ font-family:'Newsreader', serif; font-weight:600; font-style:italic; font-size:18px; color:var(--sage-dark); }
   .brand-bar .bslogan{ font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold-soft); }
+  .bnote{ font-family:'Newsreader', serif; font-style:italic; font-size:12.5px; color:var(--ink-dim); margin-top:4px; }
+  .theme-btn{
+    margin-left:auto; background:var(--bg-soft); border:1px solid var(--line); border-radius:50%;
+    width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex:0 0 auto;
+  }
+  .theme-btn .icon{ width:16px; height:16px; color:var(--gold-soft); }
   .icon{ width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
 
   /* page header (non-home tabs) */
@@ -57,13 +88,28 @@
   .hero .badge svg{ width:22px; height:22px; stroke:#F3EFE3; }
 
   /* generic section */
+  /* vakit */
+  .vakit-card{ margin-top:18px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px 14px; }
+  .vakit-status{ text-align:center; font-size:12.5px; color:var(--ink-dim); padding:6px 0; }
+  .vakit-status button{
+    margin-top:8px; background:var(--bg-soft); border:1px solid var(--line); color:var(--sage-dark);
+    border-radius:12px; padding:9px 16px; font-weight:700; font-size:12.5px; cursor:pointer; font-family:inherit;
+  }
+  .vakit-next{ text-align:center; font-size:12px; color:var(--ember); font-weight:700; margin-bottom:10px; }
+  .vakit-row{ display:flex; justify-content:space-between; gap:4px; }
+  .vakit-item{ flex:1; text-align:center; padding:6px 2px; border-radius:12px; }
+  .vakit-item.active{ background:linear-gradient(160deg, #EFE9D8, #DCE3D1); }
+  .vakit-item .vname{ font-size:10.5px; color:var(--ink-dim); font-weight:700; letter-spacing:0.3px; }
+  .vakit-item.active .vname{ color:var(--sage-dark); }
+  .vakit-item .vtime{ font-family:'Newsreader', serif; font-style:italic; font-size:15.5px; color:var(--ink); margin-top:3px; }
+  .vakit-item.active .vtime{ color:var(--sage-dark); font-weight:600; }
+
   .section-row{ margin-top:30px; }
   .section-row .shead{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; }
   .section-row .shead h3{ font-family:'Newsreader', serif; font-weight:600; font-style:italic; font-size:19px; margin:0; }
   .section-row .shead .more{ font-size:12px; color:var(--gold-soft); font-weight:600; }
   .card{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px 17px; margin-bottom:12px; }
-  .escape-hint{ text-align:center; font-size:11px; color:var(--ink-dim); opacity:0.7; padding:18px 0 4px; }
-  .section-title{ font-family:'Newsreader', serif; font-style:italic; font-size:19px; color:var(--sage-dark); margin:22px 0 12px; }
+  .escape-hint{ text-align:center; font-size:11px; line-height:1.6; color:var(--ink-dim); opacity:0.7; padding:18px 24px 4px; }
 
   /* feed */
   .feed-subnav{ display:flex; gap:8px; }
@@ -77,20 +123,24 @@
   .feed-streak{ font-size:12px; color:var(--ember); white-space:nowrap; margin-left:10px; font-weight:700; }
   .feed-scroll{
     display:flex; flex-direction:row; align-items:stretch; gap:12px; overflow-x:auto; overflow-y:hidden; scroll-snap-type:x mandatory;
-    -webkit-overflow-scrolling:touch; padding:4px 18px 16px; margin:0 -18px;
+    -webkit-overflow-scrolling:touch; padding:4px 18px 16px; margin:0 -18px 50px;
   }
   .feed-card{
-    flex:0 0 80%; scroll-snap-align:start; min-height:260px; box-sizing:border-box;
-    display:flex; flex-direction:column; justify-content:center;
-    border-radius:var(--radius); padding:24px 20px; position:relative; text-align:center;
+    flex:0 0 80%; scroll-snap-align:start; height:280px; box-sizing:border-box;
+    display:flex; flex-direction:column; overflow:hidden;
+    border-radius:var(--radius); padding:22px 20px; position:relative; text-align:center;
   }
-  .feed-card .cat{ font-size:11px; letter-spacing:2px; text-transform:uppercase; margin-bottom:14px; font-weight:700; }
-  .feed-card .body{ font-family:'Newsreader', serif; font-style:italic; font-size:19px; line-height:1.55; }
-  .feed-card .note{ margin-top:14px; font-size:14px; opacity:0.8; font-family:'Vazirmatn'; font-style:normal; }
-  .feed-card .ref{ margin-top:12px; font-size:11.5px; opacity:0.65; letter-spacing:0.5px; font-family:'Vazirmatn'; font-style:normal; }
+  .feed-card .cat{ flex:0 0 auto; font-size:11px; letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; font-weight:700; }
+  .feed-card .scrollarea{
+    flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  .feed-card .body{ font-family:'Newsreader', serif; font-style:italic; font-size:18px; line-height:1.5; }
+  .feed-card .note{ margin-top:12px; font-size:13.5px; opacity:0.8; font-family:'Vazirmatn'; font-style:normal; }
+  .feed-card .ref{ margin-top:10px; font-size:11.5px; opacity:0.65; letter-spacing:0.5px; font-family:'Vazirmatn'; font-style:normal; }
   .feed-card .fav{
     position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.5); border:none;
-    width:36px; height:36px; border-radius:50%; font-size:16px; cursor:pointer; color:var(--ink);
+    width:36px; height:36px; border-radius:50%; font-size:16px; cursor:pointer; color:var(--ink); z-index:2;
   }
   .feed-card .fav.active{ color:var(--ember); }
   .feed-card.t-ayet{ background:linear-gradient(165deg, #E5ECDB, #D2DEC4); color:var(--sage-dark); }
@@ -100,8 +150,8 @@
   .feed-card.t-dua{ background:linear-gradient(165deg, #DCE5EA, #C7D6DE); color:#4E6378; }
   .feed-card.t-sunnet{ background:linear-gradient(165deg, #E2E8D6, #CEDABF); color:#56683F; }
   .feed-card.t-fazilet{ background:linear-gradient(165deg, #F0DCE2, #E3C2CC); color:#94495C; }
-  .feed-card.t-end{ background:linear-gradient(165deg, #4F6149, #36452F); color:#F3EFE3; padding:34px 24px; }
-  .feed-card.t-end .big-mark{ font-family:'Newsreader', serif; font-style:italic; font-size:24px; color:#F3EFE3; margin-bottom:12px; }
+  .feed-card.t-end{ background:linear-gradient(165deg, #4F6149, #36452F); color:#F3EFE3; height:auto; min-height:280px; padding:30px 22px; justify-content:center; }
+  .feed-card.t-end .big-mark{ font-family:'Newsreader', serif; font-style:italic; font-size:22px; color:#F3EFE3; margin-bottom:10px; }
   .more-btn{
     margin-top:18px; max-width:220px; padding:12px 18px; border-radius:14px; border:1px solid rgba(255,255,255,0.4);
     background:rgba(255,255,255,0.12); color:#F3EFE3; font-weight:700; font-size:13.5px; cursor:pointer; font-family:inherit;
@@ -206,7 +256,7 @@
     flex:0 0 auto; background:none; border:none; font-size:17px; cursor:pointer; color:var(--ink-dim);
   }
   .ayah-row.bookmarked .amark{ color:var(--gold); }
-  .reader-actions{ display:flex; flex-direction:column; gap:10px; margin-top:6px; }
+  #readerActions{ margin-bottom:40px; }
   .dua-card .ttl{ font-weight:700; font-size:14.5px; color:var(--sage-dark); margin-bottom:8px; }
   .dua-card .when{ margin-top:8px; font-size:12px; color:var(--ink-dim); font-style:italic; }
 
@@ -233,7 +283,15 @@
 
 <div class="wrap">
 
-  <div class="brand-bar"><span class="bname">Seyr</span><span class="bslogan">Kalbin Yolculuğu</span></div>
+  <div class="brand-bar">
+    <div class="brand-row">
+      <span class="bname">Seyr</span><span class="bslogan">Kalbin Yolculuğu</span>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Tema değiştir">
+        <svg class="icon" viewBox="0 0 24 24" id="themeIcon"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36A5.4 5.4 0 0112 4.1c0-.37.03-.74.1-1.1z"/></svg>
+      </button>
+    </div>
+    <div class="bnote">"Allah bize yeter, O ne güzel vekildir."</div>
+  </div>
 
   <!-- FEED / HOME -->
   <section class="panel active" id="panel-feed">
@@ -244,6 +302,8 @@
       <div class="src" id="heroQuoteRef"></div>
       <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2c0 5 3 7 3 7s-3 1-3 6c0-5-3-6-3-6s3-2 3-7z"/><circle cx="12" cy="19" r="2.4"/></svg></div>
     </div>
+
+    <div id="vakitCard"></div>
 
     <div class="section-row">
       <div class="shead"><h3>Bugünün Akışı</h3><span class="feed-streak" id="feedStreak"></span></div>
@@ -315,7 +375,7 @@
 
   <!-- ARAÇLAR -->
   <section class="panel" id="panel-araclar">
-    <div class="page-head"><div class="eyebrow">Araçlar</div><h2>Zikir, Kayıtlar</h2></div>
+    <div class="page-head"><div class="eyebrow">Araçlar</div><h2>Zikir &amp; Kayıtlar</h2></div>
 
     <div class="grp-title">Zikir</div>
     <div class="card zikir-card">
@@ -338,7 +398,7 @@
     <div id="favoritesList"></div>
   </section>
 
-  <div class="escape-hint">Seyr — Kalbin Yolculuğu · kişisel kullanım için yapıldı</div>
+  <div class="escape-hint">Seyr — Kalbin Yolculuğu<br>Ayetler Diyanet meali, hadisler Kütüb-i Sitte kaynaklarından derlenmiştir · kişisel kullanım için yapıldı</div>
 </div>
 
 <nav class="tabs">
@@ -385,6 +445,30 @@ function loadState(){
 }
 function saveState(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
 let state = loadState();
+
+/* ---------- gece/gündüz modu ---------- */
+const SUN_PATH = 'M12 17a5 5 0 100-10 5 5 0 000 10z M12 1v2 M12 21v2 M4.2 4.2l1.4 1.4 M18.4 18.4l1.4 1.4 M1 12h2 M21 12h2 M4.2 19.8l1.4-1.4 M18.4 5.6l1.4-1.4';
+const MOON_PATH = 'M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z';
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  try{ localStorage.setItem('seyr_theme', theme); }catch(e){}
+  const iconEl = document.getElementById('themeIcon');
+  if(iconEl) iconEl.innerHTML = `<path d="${theme==='dark' ? MOON_PATH : SUN_PATH}"/>`;
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.setAttribute('content', theme==='dark' ? '#141C17' : '#F3EFE3');
+}
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  applyTheme(cur === 'dark' ? 'light' : 'dark');
+}
+function initTheme(){
+  let saved = null;
+  try{ saved = localStorage.getItem('seyr_theme'); }catch(e){}
+  if(!saved){
+    saved = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  }
+  applyTheme(saved);
+}
 if(!state.feed){ state.feed = { favorites:{}, streak:0, lastDone:null, extra:0 }; saveState(); }
 function migrateFavorites(){
   let changed = false;
@@ -446,10 +530,6 @@ function switchTab(name){
 document.querySelectorAll('.tab-btn').forEach(btn=>{
   btn.addEventListener('click', ()=> switchTab(btn.dataset.tab));
 });
-function quickTile(target, ftype){
-  switchTab(target);
-  if(ftype) setTimeout(()=>switchFeedType(ftype), 10);
-}
 
 /* ===================== FEED ===================== */
 let FEED_ITEMS = [
@@ -826,9 +906,11 @@ function feedCardHtml(item, key){
   return `<div class="feed-card t-${item.type}">
     <button class="fav ${isFav?'active':''}" data-key="${escAttr(key)}" data-type="${escAttr(item.type)}" data-body="${escAttr(item.body)}" data-ref="${escAttr(item.ref||'')}" onclick="toggleFavBtn(this)">${isFav?'♥':'♡'}</button>
     <div class="cat">${catLabel(item.type)}</div>
-    <div class="body">${escapeHtml(item.body)}</div>
-    ${item.note ? `<div class="note">${escapeHtml(item.note)}</div>` : ''}
-    ${item.ref ? `<div class="ref">${escapeHtml(item.ref)}</div>` : ''}
+    <div class="scrollarea">
+      <div class="body">${escapeHtml(item.body)}</div>
+      ${item.note ? `<div class="note">${escapeHtml(item.note)}</div>` : ''}
+      ${item.ref ? `<div class="ref">${escapeHtml(item.ref)}</div>` : ''}
+    </div>
   </div>`;
 }
 function renderFeed(){
@@ -1072,6 +1154,92 @@ function renderHero(){
   document.getElementById('heroQuoteRef').textContent = item.ref ? item.ref.toUpperCase() : (item.type==='hadis' ? 'HADÎS-İ ŞERİF' : 'AYET-İ KERÎME');
 }
 
+/* ===================== EZAN VAKİTLERİ ===================== */
+const VAKIT_LIST = [
+  {key:'Fajr', label:'İmsak'},
+  {key:'Sunrise', label:'Güneş'},
+  {key:'Dhuhr', label:'Öğle'},
+  {key:'Asr', label:'İkindi'},
+  {key:'Maghrib', label:'Akşam'},
+  {key:'Isha', label:'Yatsı'}
+];
+let vakitInterval = null;
+function vakitCacheKey(){ return 'seyr_vakit_'+todayStr(); }
+function renderVakitCard(){
+  const wrap = document.getElementById('vakitCard');
+  if(!wrap) return;
+  let cached = null;
+  try{ cached = JSON.parse(localStorage.getItem(vakitCacheKey())); }catch(e){}
+  if(cached && cached.timings){
+    renderVakitTimes(cached.timings);
+  } else {
+    wrap.innerHTML = `<div class="vakit-card">
+      <div class="vakit-status">Bugünün namaz vakitlerini görmek için konumuna izin ver.
+        <br><button onclick="loadVakitTimes()">Vakitleri Göster</button>
+      </div>
+    </div>`;
+  }
+}
+function loadVakitTimes(){
+  const wrap = document.getElementById('vakitCard');
+  wrap.innerHTML = `<div class="vakit-card"><div class="vakit-status">Konum alınıyor…</div></div>`;
+  if(!navigator.geolocation){
+    wrap.innerHTML = `<div class="vakit-card"><div class="vakit-status">Cihazın konum servisini desteklemiyor.</div></div>`;
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const {latitude, longitude} = pos.coords;
+    const ts = Math.floor(Date.now()/1000);
+    fetch(`https://api.aladhan.com/v1/timings/${ts}?latitude=${latitude}&longitude=${longitude}&method=13`)
+      .then(r=>r.json())
+      .then(json=>{
+        const timings = json.data.timings;
+        localStorage.setItem(vakitCacheKey(), JSON.stringify({timings}));
+        renderVakitTimes(timings);
+      })
+      .catch(()=>{
+        wrap.innerHTML = `<div class="vakit-card"><div class="vakit-status">Vakitler alınamadı.<br><button onclick="loadVakitTimes()">Tekrar Dene</button></div></div>`;
+      });
+  }, err=>{
+    let msg = 'Konum alınamadı.';
+    if(err.code === 1) msg = 'Konum izni reddedildi. Ayarlardan izin vermen gerekiyor.';
+    wrap.innerHTML = `<div class="vakit-card"><div class="vakit-status">${msg}<br><button onclick="loadVakitTimes()">Tekrar Dene</button></div></div>`;
+  }, { enableHighAccuracy:false, timeout:12000, maximumAge:3600000 });
+}
+function timeToMinutes(t){
+  const [h,m] = t.split(':').map(Number);
+  return h*60+m;
+}
+function renderVakitTimes(timings){
+  const wrap = document.getElementById('vakitCard');
+  const now = new Date();
+  const nowMin = now.getHours()*60 + now.getMinutes();
+  let nextIdx = -1;
+  const mins = VAKIT_LIST.map(v=> timeToMinutes((timings[v.key]||'00:00').slice(0,5)) );
+  for(let i=0;i<mins.length;i++){ if(nowMin < mins[i]){ nextIdx = i; break; } }
+  let nextLabel = '';
+  if(nextIdx === -1){
+    nextLabel = 'Bugünün vakitleri tamamlandı, yarın İmsak ile başlar.';
+  } else {
+    const diff = mins[nextIdx] - nowMin;
+    const h = Math.floor(diff/60), m = diff%60;
+    nextLabel = (VAKIT_LIST[nextIdx].label)+'e '+(h>0? h+' sa ':'')+m+' dk kaldı';
+  }
+  wrap.innerHTML = `<div class="vakit-card">
+    <div class="vakit-next">${nextLabel}</div>
+    <div class="vakit-row">
+      ${VAKIT_LIST.map((v,i)=>`
+        <div class="vakit-item ${i===nextIdx?'active':''}">
+          <div class="vname">${v.label}</div>
+          <div class="vtime">${(timings[v.key]||'--:--').slice(0,5)}</div>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
+  if(vakitInterval) clearInterval(vakitInterval);
+  vakitInterval = setInterval(()=>renderVakitTimes(timings), 60000);
+}
+
 /* ===================== DUALAR ===================== */
 const DUALAR = [
   {ttl:'Sabah Duası', body:'Allah\'ım! Senin sayende sabaha eriştik, senin sayende akşama ereriz. Hayat da, ölüm de senin elindedir; dönüş yalnız sanadır.', when:'Sabah uyanınca okunur.'},
@@ -1300,7 +1468,9 @@ function safeInit(name, fn){
   try{ fn(); }catch(e){ console.error('Init failed:', name, e); }
 }
 safeInit('migrateFavorites', migrateFavorites);
+safeInit('initTheme', initTheme);
 safeInit('renderHero', renderHero);
+safeInit('renderVakitCard', renderVakitCard);
 safeInit('renderDualar', renderDualar);
 safeInit('renderOgretiler', renderOgretiler);
 safeInit('renderFeed', renderFeed);
