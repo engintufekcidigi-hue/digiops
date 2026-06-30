@@ -95,6 +95,7 @@
     margin-top:8px; background:var(--bg-soft); border:1px solid var(--line); color:var(--sage-dark);
     border-radius:12px; padding:9px 16px; font-weight:700; font-size:12.5px; cursor:pointer; font-family:inherit;
   }
+  .vakit-city{ text-align:center; font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:var(--gold-soft); margin-bottom:4px; }
   .vakit-next{ text-align:center; font-size:12px; color:var(--ember); font-weight:700; margin-bottom:10px; }
   .vakit-row{ display:flex; justify-content:space-between; gap:4px; }
   .vakit-item{ flex:1; text-align:center; padding:6px 2px; border-radius:12px; }
@@ -396,6 +397,15 @@
 
     <div class="grp-title">Kaydettiklerim</div>
     <div id="favoritesList"></div>
+
+    <div class="grp-title">Verilerim</div>
+    <div class="card">
+      <p class="hint-text" style="margin-bottom:12px;">Zikir geçmişin, favorilerin ve kaldığın yer sadece bu telefonda saklanıyor. Telefon değiştirirsen veya Safari verilerini temizlersen kaybolabilir — düzenli yedek almanı öneririm.</p>
+      <button class="locate-btn" onclick="exportSeyrData()">Yedeği İndir</button>
+      <button class="locate-btn" style="margin-top:8px;" onclick="document.getElementById('importFile').click()">Yedekten Geri Yükle</button>
+      <input type="file" id="importFile" accept="application/json" style="display:none;" onchange="importSeyrData(event)">
+      <div id="importStatus" class="namaz-intro" style="margin-top:10px; display:none;"></div>
+    </div>
   </section>
 
   <div class="escape-hint">Seyr — Kalbin Yolculuğu<br>Ayetler Diyanet meali, hadisler Kütüb-i Sitte kaynaklarından derlenmiştir · kişisel kullanım için yapıldı</div>
@@ -748,6 +758,10 @@ async function fetchOneHadis(){
   const data = await res.json();
   const h = data && data.hadiths && data.hadiths[0];
   if(!h || !h.text || h.text.trim().length < 5) throw new Error('hadis boş');
+  if(h.grades && h.grades.length){
+    const hasWeak = h.grades.some(g => /daif|zayıf|munkar|shadh/i.test(g.grade||''));
+    if(hasWeak) throw new Error('zayıf hadis, atlanıyor');
+  }
   return { type:'hadis', body: h.text, ref: book.name+', No. '+num, key:'live_hadis_'+book.key+'_'+num };
 }
 async function fetchManyWithRetry(fetchFn, count, maxAttempts){
@@ -767,7 +781,7 @@ async function upgradeFeedWithLiveContent(type){
   const fetchFn = type === 'ayet' ? fetchOneAyet : fetchOneHadis;
   let liveItems;
   try{
-    liveItems = await fetchManyWithRetry(fetchFn, 16, 30);
+    liveItems = await fetchManyWithRetry(fetchFn, 16, 45);
   }catch(e){ return; }
   if(!liveItems || liveItems.length < 5) return; // yeterli gelmediyse yerel listeyi koru
   if(currentFeedType !== type) return; // kullanıcı bu sırada sekme değiştirmiş olabilir
@@ -1188,7 +1202,7 @@ function renderVakitCard(){
   let cached = null;
   try{ cached = JSON.parse(localStorage.getItem(vakitCacheKey())); }catch(e){}
   if(cached && cached.timings){
-    renderVakitTimes(cached.timings);
+    renderVakitTimes(cached.timings, cached.city);
   } else {
     wrap.innerHTML = `<div class="vakit-card">
       <div class="vakit-status">Bugünün namaz vakitlerini görmek için konumuna izin ver.
@@ -1197,11 +1211,40 @@ function renderVakitCard(){
     </div>`;
   }
 }
+const VAKIT_CITIES = [
+  {name:'İstanbul', lat:41.0082, lng:28.9784},
+  {name:'Ankara', lat:39.9334, lng:32.8597},
+  {name:'İzmir', lat:38.4237, lng:27.1428},
+  {name:'Bursa', lat:40.1885, lng:29.0610},
+  {name:'Antalya', lat:36.8969, lng:30.7133},
+  {name:'Mekke', lat:21.4225, lng:39.8262}
+];
+function citySelectHtml(){
+  return `<div class="vakit-status" style="margin-top:10px;">Ya da bir şehir seç:</div>
+    <div class="zikir-row" style="margin-top:8px;">
+      ${VAKIT_CITIES.map(c=>`<button class="chip" onclick="loadVakitForCity(${c.lat}, ${c.lng}, '${c.name}')">${c.name}</button>`).join('')}
+    </div>`;
+}
+function loadVakitForCity(lat, lng, name){
+  const wrap = document.getElementById('vakitCard');
+  wrap.innerHTML = `<div class="vakit-card"><div class="vakit-status">${name} için vakitler alınıyor…</div></div>`;
+  const ts = Math.floor(Date.now()/1000);
+  fetch(`https://api.aladhan.com/v1/timings/${ts}?latitude=${lat}&longitude=${lng}&method=13`)
+    .then(r=>r.json())
+    .then(json=>{
+      const timings = json.data.timings;
+      localStorage.setItem(vakitCacheKey(), JSON.stringify({timings, city:name}));
+      renderVakitTimes(timings, name);
+    })
+    .catch(()=>{
+      wrap.innerHTML = `<div class="vakit-card"><div class="vakit-status">Vakitler alınamadı.<br><button onclick="loadVakitTimes()">Tekrar Dene</button></div>${citySelectHtml()}</div>`;
+    });
+}
 function loadVakitTimes(){
   const wrap = document.getElementById('vakitCard');
   wrap.innerHTML = `<div class="vakit-card"><div class="vakit-status">Konum alınıyor…</div></div>`;
   if(!navigator.geolocation){
-    wrap.innerHTML = `<div class="vakit-card"><div class="vakit-status">Cihazın konum servisini desteklemiyor.</div></div>`;
+    wrap.innerHTML = `<div class="vakit-card"><div class="vakit-status">Cihazın konum servisini desteklemiyor.</div>${citySelectHtml()}</div>`;
     return;
   }
   navigator.geolocation.getCurrentPosition(pos=>{
@@ -1215,19 +1258,19 @@ function loadVakitTimes(){
         renderVakitTimes(timings);
       })
       .catch(()=>{
-        wrap.innerHTML = `<div class="vakit-card"><div class="vakit-status">Vakitler alınamadı.<br><button onclick="loadVakitTimes()">Tekrar Dene</button></div></div>`;
+        wrap.innerHTML = `<div class="vakit-card"><div class="vakit-status">Vakitler alınamadı.<br><button onclick="loadVakitTimes()">Tekrar Dene</button></div>${citySelectHtml()}</div>`;
       });
   }, err=>{
     let msg = 'Konum alınamadı.';
-    if(err.code === 1) msg = 'Konum izni reddedildi. Ayarlardan izin vermen gerekiyor.';
-    wrap.innerHTML = `<div class="vakit-card"><div class="vakit-status">${msg}<br><button onclick="loadVakitTimes()">Tekrar Dene</button></div></div>`;
+    if(err.code === 1) msg = 'Konum izni reddedildi.';
+    wrap.innerHTML = `<div class="vakit-card"><div class="vakit-status">${msg}</div>${citySelectHtml()}</div>`;
   }, { enableHighAccuracy:false, timeout:12000, maximumAge:3600000 });
 }
 function timeToMinutes(t){
   const [h,m] = t.split(':').map(Number);
   return h*60+m;
 }
-function renderVakitTimes(timings){
+function renderVakitTimes(timings, cityName){
   const wrap = document.getElementById('vakitCard');
   const now = new Date();
   const nowMin = now.getHours()*60 + now.getMinutes();
@@ -1248,6 +1291,7 @@ function renderVakitTimes(timings){
     nextLabel = (VAKIT_LIST[nextIdx].label)+'e '+(h>0? h+' sa ':'')+m+' dk kaldı';
   }
   wrap.innerHTML = `<div class="vakit-card">
+    ${cityName ? `<div class="vakit-city">${escapeHtml(cityName)}</div>` : ''}
     <div class="vakit-next">${nextLabel}</div>
     <div class="vakit-row">
       ${VAKIT_LIST.map((v,i)=>`
@@ -1259,7 +1303,7 @@ function renderVakitTimes(timings){
     </div>
   </div>`;
   if(vakitInterval) clearInterval(vakitInterval);
-  vakitInterval = setInterval(()=>renderVakitTimes(timings), 60000);
+  vakitInterval = setInterval(()=>renderVakitTimes(timings, cityName), 60000);
 }
 
 /* ===================== DUALAR ===================== */
@@ -1460,6 +1504,45 @@ function renderZikirHistory(){
   }).join('');
 }
 
+
+/* ---------- verilerim: yedekle / geri yükle ---------- */
+function exportSeyrData(){
+  try{
+    const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'seyr-yedek-'+todayStr()+'.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }catch(e){
+    alert('Yedek oluşturulamadı: '+e.message);
+  }
+}
+function importSeyrData(event){
+  const file = event.target.files[0];
+  const statusEl = document.getElementById('importStatus');
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(){
+    try{
+      const imported = JSON.parse(reader.result);
+      if(typeof imported !== 'object' || !imported) throw new Error('Geçersiz dosya');
+      state = imported;
+      saveState();
+      statusEl.style.display = 'block';
+      statusEl.textContent = 'Yedek başarıyla geri yüklendi. Sayfa yenileniyor…';
+      setTimeout(()=>location.reload(), 1200);
+    }catch(e){
+      statusEl.style.display = 'block';
+      statusEl.textContent = 'Bu dosya okunamadı, geçerli bir Seyr yedeği olduğundan emin ol.';
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
 
 /* ---------- kaydettiklerim ---------- */
 function renderFavorites(){
