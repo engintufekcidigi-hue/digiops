@@ -646,6 +646,23 @@ let FEED_ITEMS = [
   {type:'terim', body:'İhlas', note:'Bir ameli sadece Allah rızası için yapmak; gösteriş ve başkalarının beğenisinden arınmak.'},
   {type:'terim', body:'Vera', note:'Şüpheli şeylerden bile uzak durarak haramdan kesin biçimde kaçınmak.'},
   {type:'terim', body:'Zikir', note:'Allah\'ı anmak; dil ile, kalp ile veya davranışla sürekli O\'nu hatırlamak.'},
+  {type:'terim', body:'Fıtrat', note:'İnsanın doğuştan getirdiği, Allah\'ı tanımaya yatkın temiz öz yapısı.'},
+  {type:'terim', body:'Bereket', note:'Az olanın çoğalması; görünmeyen hayrın ve artışın Allah\'tan gelmesi.'},
+  {type:'terim', body:'Hidayet', note:'Allah\'ın kalbe doğru yolu göstermesi ve kişinin gönülden o yola yönelmesi.'},
+  {type:'terim', body:'Adalet', note:'Hak sahibine hakkını vermek; hiçbir tarafa haksızlık etmeden denge gözetmek.'},
+  {type:'terim', body:'Emanet', note:'Birine güvenle bırakılan, korunması ve eksiksiz teslim edilmesi gereken şey.'},
+  {type:'terim', body:'Sıla-i Rahim', note:'Akraba ile ilişkiyi sürdürmek; onları arayıp sormak, ziyaret edip ilgilenmek.'},
+  {type:'terim', body:'Helal', note:'Dinen yapılmasına, kullanılmasına veya yenmesine izin verilen şey.'},
+  {type:'terim', body:'Haram', note:'Dinen kesin olarak yasaklanmış, yapılması veya kullanılması günah olan şey.'},
+  {type:'terim', body:'Sünnet', note:'Hz. Peygamber\'in söz, davranış ve onaylarıyla bize bıraktığı yaşam yolu.'},
+  {type:'terim', body:'Niyet', note:'Bir işe başlarken kalpte taşınan amaç; bir amelin değerini belirleyen temel unsur.'},
+  {type:'terim', body:'Kanaat', note:'Elindekiyle yetinip gönülden razı olmak; aç gözlülükten uzak durmak.'},
+  {type:'terim', body:'Tevazu', note:'Kendini başkalarından üstün görmeden alçakgönüllü davranmak.'},
+  {type:'terim', body:'Hüsn-i Zan', note:'İnsanlar ve olaylar hakkında iyi niyetli, olumlu bir bakış açısı taşımak.'},
+  {type:'terim', body:'Emr-i bi\'l-Mâruf', note:'İyiliği tavsiye etmek, doğruyu hatırlatmak ve teşvik etmek.'},
+  {type:'terim', body:'Rahmet', note:'Allah\'ın kullarına olan sınırsız merhameti ve şefkati.'},
+  {type:'terim', body:'Mağfiret', note:'Allah\'ın günahları bağışlaması ve kulunun hatalarını örtmesi.'},
+  {type:'terim', body:'Vesvese', note:'Şeytanın veya nefsin kalbe attığı kuşkulu, huzursuz edici düşünceler.'},
 
   {type:'kissa', body:'Hz. Ömer (r.a.), halife iken sırtında un çuvalıyla aç bir aileye yardıma giderken görülmüştü. "Bırak ben taşıyayım" diyenlere "Kıyamet günü günahımı da sen mi taşıyacaksın?" demişti.', note:'Liderlik, sorumluluğu başkasına devretmek değil bizzat üstlenmektir.'},
   {type:'kissa', body:'Bilal-i Habeşi (r.a.), işkence altında bile "Ehad, Ehad" (Allah birdir) demeye devam etti. İmanından asla taviz vermedi.', note:'Zorluk, imanın gerçek sınavıdır.'},
@@ -1218,8 +1235,13 @@ function renderVakitTimes(timings){
   const mins = VAKIT_LIST.map(v=> timeToMinutes((timings[v.key]||'00:00').slice(0,5)) );
   for(let i=0;i<mins.length;i++){ if(nowMin < mins[i]){ nextIdx = i; break; } }
   let nextLabel = '';
+  let highlightIdx = nextIdx;
   if(nextIdx === -1){
-    nextLabel = 'Bugünün vakitleri tamamlandı, yarın İmsak ile başlar.';
+    // yatsı geçti: ertesi günün imsakına geri sayım (bugünün imsak saati esas alınarak yaklaşık hesaplanır)
+    const diff = (mins[0] + 1440) - nowMin;
+    const h = Math.floor(diff/60), m = diff%60;
+    nextLabel = 'İmsak\'a (yarın) '+(h>0? h+' sa ':'')+m+' dk kaldı';
+    highlightIdx = 0;
   } else {
     const diff = mins[nextIdx] - nowMin;
     const h = Math.floor(diff/60), m = diff%60;
@@ -1229,7 +1251,7 @@ function renderVakitTimes(timings){
     <div class="vakit-next">${nextLabel}</div>
     <div class="vakit-row">
       ${VAKIT_LIST.map((v,i)=>`
-        <div class="vakit-item ${i===nextIdx?'active':''}">
+        <div class="vakit-item ${i===highlightIdx?'active':''}">
           <div class="vname">${v.label}</div>
           <div class="vtime">${(timings[v.key]||'--:--').slice(0,5)}</div>
         </div>
@@ -1271,6 +1293,30 @@ function renderDualar(){
 }
 
 /* ===================== ÖĞRETİLER ===================== */
+const ABDESTI_BOZANLAR = [
+  'Tuvalet ihtiyacının (büyük veya küçük abdest) giderilmesi',
+  'Karından veya arkadan gaz çıkması',
+  'Ağız dolusu kusmak',
+  'Vücuttan kan, irin gibi bir sıvının akması (yara, burun kanaması vb.)',
+  'Bayılmak veya akıl sağlığını geçici de olsa kaybetmek',
+  'Yatarak veya bir yere yaslanarak derin uykuya dalmak',
+  'Namaz içinde, rükû ve secdesi olan bir namazda sesli gülmek'
+];
+const NAMAZI_BOZANLAR = [
+  'Namaz içinde bilerek konuşmak',
+  'Kasıtlı olarak bir şey yemek veya içmek',
+  'Özürsüz olarak kıbleden başka yöne dönmek',
+  'Namaz içindeyken abdestin bozulması',
+  'Namazla bağdaşmayan uzun bir hareketle meşgul olmak',
+  'Namaz içinde sesli gülmek'
+];
+const ORUCU_BOZANLAR = [
+  'Kasıtlı olarak bir şey yemek veya içmek',
+  'Kasıtlı olarak kusmak',
+  'Sigara, nargile gibi şeyleri içe çekmek',
+  'Adet veya lohusalık halinin başlaması',
+  'Kasıtlı olarak eşler arası yakınlaşmada bulunmak (bu durum ayrıca kefaret gerektirir)'
+];
 const ISLAM_SARTLARI = [
   'Kelime-i şehadet getirmek (Allah\'tan başka ilah olmadığına ve Muhammed\'in O\'nun kulu ve elçisi olduğuna şahitlik etmek)',
   'Namaz kılmak',
@@ -1287,8 +1333,6 @@ const IMAN_SARTLARI = [
   'Kadere, hayrın ve şerrin Allah\'tan olduğuna iman etmek'
 ];
 const FARZ_32 = [
-  {grp:'İmanın Şartı (6)', items: IMAN_SARTLARI},
-  {grp:'İslam\'ın Şartı (5)', items: ISLAM_SARTLARI},
   {grp:'Namazın Dışındaki Farzları (6)', items:[
     'Hadesten taharet (abdestsizlik halinden temizlenmek)',
     'Necasetten taharet (beden, elbise ve namaz kılınan yerin pis olmaktan temiz olması)',
@@ -1353,9 +1397,13 @@ function renderOgretiler(){
   html += `<div class="grp-title">İslam'ın Şartları</div>` + ogretiriList(ISLAM_SARTLARI);
   html += `<div class="grp-title">İmanın Şartları (Âmentü)</div>` + ogretiriList(IMAN_SARTLARI);
   html += `<div class="grp-title">32 Farz</div>`;
+  html += `<div class="namaz-intro" style="margin-bottom:10px;">İlk 11 farz, yukarıdaki imanın 6 şartı ile İslam'ın 5 şartıdır. Geri kalan 21 farz şöyle:</div>`;
   html += FARZ_32.map(g => `<div class="nstep"><div class="title" style="margin-bottom:10px;">${escapeHtml(g.grp)}</div><div class="meal">${g.items.map((it,i)=>`<div style="margin-bottom:${i<g.items.length-1?'8px':'0'}">${i+1}. ${escapeHtml(it)}</div>`).join('')}</div></div>`).join('');
   html += `<div class="grp-title">Namazın Sünnetleri</div>` + ogretiriList(NAMAZ_SUNNETLERI);
   html += `<div class="grp-title">Abdestin Sünnetleri</div>` + ogretiriList(ABDEST_SUNNETLERI);
+  html += `<div class="grp-title">Abdesti Bozan Durumlar</div>` + ogretiriList(ABDESTI_BOZANLAR);
+  html += `<div class="grp-title">Namazı Bozan Durumlar</div>` + ogretiriList(NAMAZI_BOZANLAR);
+  html += `<div class="grp-title">Orucu Bozan Durumlar</div>` + ogretiriList(ORUCU_BOZANLAR);
   wrap.innerHTML = html;
 }
 
