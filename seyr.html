@@ -22,7 +22,7 @@
   body{
     margin:0; background:var(--bg); color:var(--ink);
     font-family:'Vazirmatn', system-ui, sans-serif;
-    min-height:100vh; padding-bottom:130px; position:relative; overflow-x:hidden;
+    min-height:100vh; padding-bottom:195px; position:relative; overflow-x:hidden;
   }
   .wrap{max-width:520px; margin:0 auto; padding:0 18px;}
   .brand-bar{ display:flex; align-items:baseline; gap:8px; padding:16px 0 0; }
@@ -56,22 +56,6 @@
   }
   .hero .badge svg{ width:22px; height:22px; stroke:#F3EFE3; }
 
-  /* tile grid */
-  .tile-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:40px; }
-  .tile{
-    background:var(--card); border:1px solid var(--line); border-radius:18px;
-    padding:14px 6px 12px; text-align:center; cursor:pointer;
-  }
-  .tile .ic{
-    width:42px; height:42px; border-radius:50%; margin:0 auto 8px;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .tile:nth-child(1) .ic{ background:#DCE6D6; color:var(--sage-dark); }
-  .tile:nth-child(2) .ic{ background:#EFE2C9; color:var(--gold-soft); }
-  .tile:nth-child(3) .ic{ background:#D9E0E8; color:#4E6378; }
-  .tile:nth-child(4) .ic{ background:#E7DCEC; color:#6B4E78; }
-  .tile .lbl{ font-size:11.5px; font-weight:700; line-height:1.25; }
-
   /* generic section */
   .section-row{ margin-top:30px; }
   .section-row .shead{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; }
@@ -80,17 +64,6 @@
   .card{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px 17px; margin-bottom:12px; }
   .escape-hint{ text-align:center; font-size:11px; color:var(--ink-dim); opacity:0.7; padding:18px 0 4px; }
   .section-title{ font-family:'Newsreader', serif; font-style:italic; font-size:19px; color:var(--sage-dark); margin:22px 0 12px; }
-
-  /* promo row (diğer bölümler) */
-  .promo-row{ display:flex; gap:10px; overflow-x:auto; padding-bottom:4px; margin-bottom:20px; -webkit-overflow-scrolling:touch; }
-  .promo{
-    flex:0 0 auto; width:150px; height:120px; border-radius:18px; padding:14px;
-    display:flex; flex-direction:column; justify-content:space-between; cursor:pointer; color:#F3EFE3;
-    background:linear-gradient(160deg, #5C7253, #36452F);
-  }
-  .promo.alt{ background:linear-gradient(160deg, #8C6A2E, #5C4720); }
-  .promo .tag{ font-size:9.5px; letter-spacing:1.5px; text-transform:uppercase; opacity:0.85; }
-  .promo .ttl{ font-family:'Newsreader', serif; font-style:italic; font-size:16px; line-height:1.25; }
 
   /* feed */
   .feed-subnav{ display:flex; gap:8px; }
@@ -102,13 +75,18 @@
   .feed-head{ display:flex; align-items:center; justify-content:space-between; padding:12px 0 10px; }
   .feed-count{ font-size:12px; color:var(--ink-dim); }
   .feed-streak{ font-size:12px; color:var(--ember); white-space:nowrap; margin-left:10px; font-weight:700; }
-  .feed-scroll{ display:flex; flex-direction:column; gap:12px; }
+  .feed-scroll{
+    display:flex; flex-direction:row; align-items:stretch; gap:12px; overflow-x:auto; overflow-y:hidden; scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch; padding:4px 18px 16px; margin:0 -18px;
+  }
   .feed-card{
-    border-radius:var(--radius); padding:30px 24px; position:relative; text-align:center;
+    flex:0 0 80%; scroll-snap-align:start; min-height:260px; box-sizing:border-box;
+    display:flex; flex-direction:column; justify-content:center;
+    border-radius:var(--radius); padding:24px 20px; position:relative; text-align:center;
   }
   .feed-card .cat{ font-size:11px; letter-spacing:2px; text-transform:uppercase; margin-bottom:14px; font-weight:700; }
-  .feed-card .body{ font-family:'Newsreader', serif; font-style:italic; font-size:20px; line-height:1.6; }
-  .feed-card .note{ margin-top:14px; font-size:14.5px; opacity:0.8; font-family:'Vazirmatn'; font-style:normal; }
+  .feed-card .body{ font-family:'Newsreader', serif; font-style:italic; font-size:19px; line-height:1.55; }
+  .feed-card .note{ margin-top:14px; font-size:14px; opacity:0.8; font-family:'Vazirmatn'; font-style:normal; }
   .feed-card .ref{ margin-top:12px; font-size:11.5px; opacity:0.65; letter-spacing:0.5px; font-family:'Vazirmatn'; font-style:normal; }
   .feed-card .fav{
     position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.5); border:none;
@@ -200,22 +178,55 @@
   .fav-item .fbody{ font-size:14px; line-height:1.6; margin-top:4px; }
   .fav-item .fref{ font-size:11px; color:var(--ink-dim); margin-top:6px; }
   .fav-item .funfav{ flex:0 0 auto; background:none; border:none; color:var(--ember); font-size:18px; cursor:pointer; }
+
+  /* kuran reader */
+  .bm-card{
+    background:linear-gradient(160deg, #EFE9D8, #DCE3D1); border:1px solid var(--gold-soft);
+    border-radius:var(--radius); padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; gap:10px;
+  }
+  .bm-card .bm-text{ font-size:13.5px; color:var(--ink); }
+  .bm-card .bm-text b{ color:var(--sage-dark); }
+  .bm-card button{
+    flex:0 0 auto; background:var(--sage-dark); color:#F3EFE3; border:none; border-radius:12px;
+    padding:10px 16px; font-weight:700; font-size:12.5px; cursor:pointer; font-family:inherit; white-space:nowrap;
+  }
+  .reader-head{ text-align:center; margin:22px 0 12px; }
+  .reader-head h3{ font-family:'Newsreader', serif; font-style:italic; font-size:19px; color:var(--sage-dark); margin:0; }
+  .ayah-row{
+    background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 16px; margin-bottom:10px;
+    display:flex; gap:12px; align-items:flex-start;
+  }
+  .ayah-row.bookmarked{ border-color:var(--gold); background:linear-gradient(180deg, #FBF6E8, var(--card)); }
+  .ayah-row .anum{
+    flex:0 0 auto; width:28px; height:28px; border-radius:50%; background:var(--bg-soft); color:var(--gold-soft);
+    display:flex; align-items:center; justify-content:center; font-size:11.5px; font-weight:700;
+  }
+  .ayah-row .atext{ flex:1; font-size:14.5px; line-height:1.7; color:var(--ink); }
+  .ayah-row .amark{
+    flex:0 0 auto; background:none; border:none; font-size:17px; cursor:pointer; color:var(--ink-dim);
+  }
+  .ayah-row.bookmarked .amark{ color:var(--gold); }
+  .reader-actions{ display:flex; flex-direction:column; gap:10px; margin-top:6px; }
   .dua-card .ttl{ font-weight:700; font-size:14.5px; color:var(--sage-dark); margin-bottom:8px; }
   .dua-card .when{ margin-top:8px; font-size:12px; color:var(--ink-dim); font-style:italic; }
 
   /* bottom nav */
   nav.tabs{
     position:fixed; left:0; right:0; bottom:0; z-index:5;
-    display:flex; background:rgba(255,255,255,0.92); backdrop-filter:blur(14px);
-    border-top:1px solid var(--line); padding:10px 10px calc(10px + env(safe-area-inset-bottom));
+    display:grid; grid-template-columns:repeat(4,1fr); gap:4px;
+    background:rgba(252,250,244,0.97); backdrop-filter:blur(16px);
+    border-top:1px solid var(--line); border-radius:22px 22px 0 0;
+    box-shadow:0 -6px 20px rgba(54,69,47,0.08);
+    padding:9px 8px calc(8px + env(safe-area-inset-bottom));
   }
   nav.tabs button{
-    flex:1; background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:3px;
-    color:var(--ink-dim); font-family:inherit; font-size:9px; font-weight:600; cursor:pointer; padding:4px 0;
-    line-height:1.2;
+    background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:3px;
+    color:var(--ink-dim); font-family:inherit; font-size:8.5px; font-weight:600; cursor:pointer;
+    padding:5px 2px; line-height:1.15; border-radius:13px; transition:background .15s ease, color .15s ease;
   }
-  nav.tabs button .icon{ width:19px; height:19px; }
-  nav.tabs button.active{ color:var(--sage-dark); }
+  nav.tabs button .icon{ width:18px; height:18px; transition:transform .15s ease; }
+  nav.tabs button.active{ color:var(--sage-dark); background:rgba(124,148,115,0.14); }
+  nav.tabs button.active .icon{ transform:translateY(-1px); }
 </style>
 </head>
 <body>
@@ -234,25 +245,6 @@
       <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2c0 5 3 7 3 7s-3 1-3 6c0-5-3-6-3-6s3-2 3-7z"/><circle cx="12" cy="19" r="2.4"/></svg></div>
     </div>
 
-    <div class="tile-grid">
-      <div class="tile" onclick="quickTile('feed','ayet')">
-        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M4 19V6a2 2 0 012-2h6v17H6a2 2 0 01-2-2z"/><path d="M20 19V6a2 2 0 00-2-2h-6v17h6a2 2 0 002-2z"/></svg></div>
-        <div class="lbl">Ayet</div>
-      </div>
-      <div class="tile" onclick="quickTile('feed','hadis')">
-        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 01-8.9 8.4 9 9 0 01-3.4-.8L3 20l1.1-5.4A8.4 8.4 0 1121 11.5z"/></svg></div>
-        <div class="lbl">Hadis</div>
-      </div>
-      <div class="tile" onclick="quickTile('feed','terim')">
-        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M6 4h11a2 2 0 012 2v14l-4-2-4 2-4-2-3 2V6a2 2 0 012-2z"/></svg></div>
-        <div class="lbl">Sözlük</div>
-      </div>
-      <div class="tile" onclick="switchTab('esma')">
-        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z"/></svg></div>
-        <div class="lbl">Esma</div>
-      </div>
-    </div>
-
     <div class="section-row">
       <div class="shead"><h3>Bugünün Akışı</h3><span class="feed-streak" id="feedStreak"></span></div>
       <div class="feed-subnav" id="feedSubnav">
@@ -262,24 +254,6 @@
       </div>
       <div class="feed-head"><div class="feed-count" id="feedCount"></div></div>
       <div class="feed-scroll" id="feedScroll"></div>
-    </div>
-
-    <div class="section-row">
-      <div class="shead"><h3>Diğer Bölümler</h3></div>
-      <div class="promo-row">
-        <div class="promo" onclick="switchTab('namaz')">
-          <div class="tag">İBADET</div>
-          <div class="ttl">Namaz Rehberi</div>
-        </div>
-        <div class="promo alt" onclick="switchTab('sureler')">
-          <div class="tag">SÛRELER</div>
-          <div class="ttl">Kısa Sûreler</div>
-        </div>
-        <div class="promo" onclick="switchTab('esma')">
-          <div class="tag">99 İSİM</div>
-          <div class="ttl">Esma-ül Hüsna</div>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -300,21 +274,29 @@
 
   <!-- SURELER -->
   <section class="panel" id="panel-sureler">
-    <div class="page-head"><div class="eyebrow">Kur'an-ı Kerim</div><h2>Sûreler</h2></div>
+    <div class="page-head"><div class="eyebrow">Kur'an-ı Kerim</div><h2>Kısa Sûreler</h2></div>
+    <div class="card namaz-intro">Namazda Fâtiha'dan sonra (ilk iki rekatta) okunabilecek kısa sûrelerden bazıları, mealiyle.</div>
+    <div id="kisaSureler"></div>
+  </section>
 
-    <div class="grp-title">Fihrist — Sure ve Ayet Bul</div>
+  <!-- KUR'AN -->
+  <section class="panel" id="panel-kuran">
+    <div class="page-head"><div class="eyebrow">Kesintisiz Okuma</div><h2>Kur'an</h2></div>
+
+    <div id="bookmarkCard"></div>
+
+    <div class="grp-title">Fihrist — Buradan Okumaya Başla</div>
     <div class="card">
       <select class="esma-search" id="fihristSurah" onchange="onFihristSurahChange()" style="margin-bottom:10px;"></select>
       <div style="display:flex; gap:10px; align-items:center;">
         <input class="esma-search" id="fihristAyah" type="number" min="1" value="1" style="margin-bottom:0; flex:1;">
-        <button class="locate-btn" style="width:auto; padding:11px 20px; white-space:nowrap;" onclick="lookupFihrist()">Göster</button>
+        <button class="locate-btn" style="width:auto; padding:11px 20px; white-space:nowrap;" onclick="startReadingFromInputs()">Oku</button>
       </div>
-      <div id="fihristResult"></div>
     </div>
 
-    <div class="grp-title">Namazda Okunan Kısa Sûreler</div>
-    <div class="card namaz-intro">Namazda Fâtiha'dan sonra (ilk iki rekatta) okunabilecek kısa sûrelerden bazıları, mealiyle.</div>
-    <div id="kisaSureler"></div>
+    <div id="readerHead"></div>
+    <div id="readerList"></div>
+    <div id="readerActions"></div>
   </section>
 
   <!-- DUALAR -->
@@ -376,6 +358,10 @@
     <svg class="icon" viewBox="0 0 24 24"><path d="M3 5c3 0 6 1 9 3 3-2 6-3 9-3v14c-3 0-6 1-9 3-3-2-6-3-9-3z"/></svg>
     Sûreler
   </button>
+  <button class="tab-btn" data-tab="kuran">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5V6a2 2 0 012-2h13v15H6a2 2 0 00-2 2.5z"/><path d="M19 19H6a2 2 0 100 4"/></svg>
+    Kur'an
+  </button>
   <button class="tab-btn" data-tab="dualar">
     <svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 8 2.5 4 6.5 4c2 0 3.5 1.2 4 2.8C11 5.2 12.5 4 14.5 4 18.5 4 20 8 18.5 12 16 16.5 12 21 12 21z"/></svg>
     Dualar
@@ -418,6 +404,7 @@ function migrateFavorites(){
   if(changed) saveState();
 }
 if(!state.zikir){ state.zikir = { count:0, goal:33, date:null, streak:0, lastDone:null, history:[] }; saveState(); }
+if(!state.quran){ state.quran = { bookmark:null }; saveState(); }
 if(!state.zikir.history){ state.zikir.history = []; saveState(); }
 
 /* ---------- date helpers ---------- */
@@ -450,6 +437,9 @@ function switchTab(name){
   document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active', p.id==='panel-'+name));
   if(name === 'araclar'){
     try{ renderFavorites(); renderZikir(); renderZikirHistory(); }catch(e){}
+  }
+  if(name === 'kuran'){
+    try{ renderBookmarkCard(); }catch(e){}
   }
   window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -712,29 +702,106 @@ function onFihristSurahChange(){
   ayahInput.max = max;
   if(parseInt(ayahInput.value,10) > max || !ayahInput.value) ayahInput.value = 1;
 }
-async function lookupFihrist(){
+
+/* ---------- kuran: kesintisiz okuma + işaretleme ---------- */
+const READER_CHUNK = 20;
+let readerSurah = null;
+let readerAyahs = [];
+let readerNextIndex = 0;
+const surahCache = {};
+
+function renderBookmarkCard(){
+  const wrap = document.getElementById('bookmarkCard');
+  if(!wrap) return;
+  const bm = state.quran && state.quran.bookmark;
+  if(!bm){ wrap.innerHTML = ''; return; }
+  wrap.innerHTML = `<div class="bm-card">
+    <div class="bm-text">Kaldığın yer: <b>${escapeHtml(SURAH_NAMES_TR[bm.surah-1])} Sûresi, ${bm.ayah}. âyet</b></div>
+    <button onclick="startReadingFrom(${bm.surah}, ${bm.ayah})">Devam Et</button>
+  </div>`;
+}
+function startReadingFromInputs(){
   const surah = parseInt(document.getElementById('fihristSurah').value, 10);
-  const max = SURAH_AYAH_COUNTS[surah-1];
   let ayah = parseInt(document.getElementById('fihristAyah').value, 10);
-  const resultEl = document.getElementById('fihristResult');
+  const max = SURAH_AYAH_COUNTS[surah-1];
   if(!ayah || ayah < 1) ayah = 1;
-  if(ayah > max){
-    resultEl.innerHTML = `<div class="namaz-intro" style="margin-top:12px;">${SURAH_NAMES_TR[surah-1]} Sûresi toplam ${max} âyettir. Lütfen 1–${max} arasında bir sayı gir.</div>`;
-    return;
-  }
-  resultEl.innerHTML = `<div class="namaz-intro" style="margin-top:12px;">Yükleniyor…</div>`;
+  if(ayah > max) ayah = max;
+  startReadingFrom(surah, ayah);
+}
+async function startReadingFrom(surah, ayah){
+  const headEl = document.getElementById('readerHead');
+  const listEl = document.getElementById('readerList');
+  const actEl = document.getElementById('readerActions');
+  headEl.innerHTML = `<div class="reader-head"><h3>Yükleniyor…</h3></div>`;
+  listEl.innerHTML = '';
+  actEl.innerHTML = '';
   try{
-    const url = `https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/tur-diyanetisleri/${surah}/${ayah}.json`;
-    const res = await fetch(url);
-    if(!res.ok) throw new Error('bulunamadı');
-    const data = await res.json();
-    if(!data || !data.text) throw new Error('boş');
-    const item = { type:'ayet', body:data.text, ref:SURAH_NAMES_TR[surah-1]+' Sûresi, '+ayah, key:'live_ayet_'+surah+'_'+ayah };
-    resultEl.innerHTML = `<div style="margin-top:14px;">${feedCardHtml(item, item.key)}</div>`;
+    let data = surahCache[surah];
+    if(!data){
+      const url = `https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/tur-diyanetisleri/${surah}.json`;
+      const res = await fetch(url);
+      if(!res.ok) throw new Error('sûre alınamadı');
+      const json = await res.json();
+      data = json.chapter;
+      surahCache[surah] = data;
+    }
+    readerSurah = surah;
+    readerAyahs = data;
+    readerNextIndex = Math.max(0, ayah-1);
+    headEl.innerHTML = `<div class="reader-head"><h3>${escapeHtml(SURAH_NAMES_TR[surah-1])} Sûresi</h3></div>`;
+    loadMoreAyahs();
   }catch(e){
-    resultEl.innerHTML = `<div class="namaz-intro" style="margin-top:12px;">Âyet getirilemedi. İnternet bağlantını kontrol edip tekrar dene.</div>`;
+    headEl.innerHTML = `<div class="namaz-intro" style="margin-top:12px;">Sûre yüklenemedi. İnternet bağlantını kontrol edip tekrar dene.</div>`;
   }
 }
+function isBookmarked(surah, ayah){
+  const bm = state.quran && state.quran.bookmark;
+  return !!(bm && bm.surah === surah && bm.ayah === ayah);
+}
+function ayahRowHtml(surah, verseObj){
+  const ayah = verseObj.verse;
+  const marked = isBookmarked(surah, ayah);
+  return `<div class="ayah-row ${marked?'bookmarked':''}" id="arow-${surah}-${ayah}">
+    <div class="anum">${ayah}</div>
+    <div class="atext">${escapeHtml(verseObj.text)}</div>
+    <button class="amark" onclick="toggleBookmarkAyah(${surah}, ${ayah})">${marked?'★':'☆'}</button>
+  </div>`;
+}
+function loadMoreAyahs(){
+  const listEl = document.getElementById('readerList');
+  const actEl = document.getElementById('readerActions');
+  const slice = readerAyahs.slice(readerNextIndex, readerNextIndex + READER_CHUNK);
+  listEl.insertAdjacentHTML('beforeend', slice.map(v=>ayahRowHtml(readerSurah, v)).join(''));
+  readerNextIndex += slice.length;
+  actEl.innerHTML = '';
+  if(readerNextIndex < readerAyahs.length){
+    actEl.innerHTML = `<button class="locate-btn" onclick="loadMoreAyahs()">Sonraki ${Math.min(READER_CHUNK, readerAyahs.length-readerNextIndex)} Âyet</button>`;
+  } else if(readerSurah < 114){
+    actEl.innerHTML = `<button class="locate-btn" onclick="startReadingFrom(${readerSurah+1}, 1)">Sonraki Sûre: ${escapeHtml(SURAH_NAMES_TR[readerSurah])} →</button>`;
+  } else {
+    actEl.innerHTML = `<div class="namaz-intro" style="text-align:center;">Kur'an-ı Kerîm'in sonuna ulaştın. 🌙</div>`;
+  }
+}
+function toggleBookmarkAyah(surah, ayah){
+  if(!state.quran) state.quran = { bookmark:null };
+  const current = state.quran.bookmark;
+  if(current && current.surah === surah && current.ayah === ayah){
+    state.quran.bookmark = null;
+  } else {
+    state.quran.bookmark = { surah, ayah };
+  }
+  saveState();
+  document.querySelectorAll('.ayah-row.bookmarked').forEach(el=>{
+    el.classList.remove('bookmarked');
+    const btn = el.querySelector('.amark'); if(btn) btn.textContent = '☆';
+  });
+  if(state.quran.bookmark){
+    const row = document.getElementById(`arow-${state.quran.bookmark.surah}-${state.quran.bookmark.ayah}`);
+    if(row){ row.classList.add('bookmarked'); const btn = row.querySelector('.amark'); if(btn) btn.textContent = '★'; }
+  }
+  renderBookmarkCard();
+}
+
 let currentFeedType = 'ayet';
 function switchFeedType(type){
   currentFeedType = type;
@@ -1242,6 +1309,7 @@ safeInit('renderEsmaList', renderEsmaList);
 safeInit('renderNamaz', renderNamaz);
 safeInit('renderKisaSureler', renderKisaSureler);
 safeInit('renderFihristSelect', renderFihristSelect);
+safeInit('renderBookmarkCard', renderBookmarkCard);
 safeInit('renderZikir', renderZikir);
 safeInit('renderZikirHistory', renderZikirHistory);
 safeInit('renderFavorites', renderFavorites);
