@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Seyr">
+<meta name="theme-color" content="#F3EFE3">
+<title>Seyr</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23F3EFE3'/%3E%3Cpath d='M50 18 L58 42 L82 42 L62 56 L70 80 L50 66 L30 80 L38 56 L18 42 L42 42 Z' fill='%23B68A3D'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F3EFE3; --bg-soft:#ECE6D5; --card:#FFFFFF; --card-hi:#FBF9F2;
+    --gold:#B68A3D; --gold-soft:#8C6A2E; --sage:#7C9473; --sage-dark:#4F6149;
+    --ink:#2B3328; --ink-dim:#7C8474; --line:#E3DCC8; --ember:#C0703F; --radius:20px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Vazirmatn', system-ui, sans-serif;
+    min-height:100vh; padding-bottom:130px; position:relative; overflow-x:hidden;
+  }
+  .wrap{max-width:520px; margin:0 auto; padding:0 18px;}
+  .brand-bar{ display:flex; align-items:baseline; gap:8px; padding:16px 0 0; }
+  .brand-bar .bname{ font-family:'Newsreader', serif; font-weight:600; font-style:italic; font-size:18px; color:var(--sage-dark); }
+  .brand-bar .bslogan{ font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold-soft); }
+  .icon{ width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+
+  /* page header (non-home tabs) */
+  .panel{ display:none; }
+  .panel.active{ display:block; animation:fade .25s ease; }
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  .page-head{ padding:22px 0 6px; text-align:center; }
+  .page-head .eyebrow{ font-size:10.5px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); }
+  .page-head h2{ font-family:'Newsreader', serif; font-weight:600; font-style:italic; font-size:24px; margin:4px 0 0; }
+
+  /* hero */
+  .hero{
+    margin-top:18px; border-radius:28px; overflow:hidden; position:relative;
+    background:linear-gradient(160deg, #EFE9D8 0%, #DCE3D1 60%, #C9D4BE 100%);
+    padding:30px 24px 44px; text-align:center;
+  }
+  .hero .leaf{ width:30px; height:30px; margin:0 auto 10px; color:var(--gold-soft); }
+  .hero h1{ font-family:'Newsreader', serif; font-weight:600; font-style:italic; font-size:27px; margin:0; color:var(--sage-dark); }
+  .hero blockquote{ margin:14px 14px 0; font-family:'Newsreader', serif; font-style:italic; font-size:16px; line-height:1.6; color:var(--ink); }
+  .hero .src{ margin-top:8px; font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold-soft); font-weight:600; }
+  .hero .badge{
+    position:absolute; left:50%; bottom:-22px; transform:translateX(-50%);
+    width:48px; height:48px; border-radius:50%; background:var(--sage-dark);
+    display:flex; align-items:center; justify-content:center; box-shadow:0 8px 18px rgba(79,97,73,0.35);
+  }
+  .hero .badge svg{ width:22px; height:22px; stroke:#F3EFE3; }
+
+  /* tile grid */
+  .tile-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:40px; }
+  .tile{
+    background:var(--card); border:1px solid var(--line); border-radius:18px;
+    padding:14px 6px 12px; text-align:center; cursor:pointer;
+  }
+  .tile .ic{
+    width:42px; height:42px; border-radius:50%; margin:0 auto 8px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .tile:nth-child(1) .ic{ background:#DCE6D6; color:var(--sage-dark); }
+  .tile:nth-child(2) .ic{ background:#EFE2C9; color:var(--gold-soft); }
+  .tile:nth-child(3) .ic{ background:#D9E0E8; color:#4E6378; }
+  .tile:nth-child(4) .ic{ background:#E7DCEC; color:#6B4E78; }
+  .tile .lbl{ font-size:11.5px; font-weight:700; line-height:1.25; }
+
+  /* generic section */
+  .section-row{ margin-top:30px; }
+  .section-row .shead{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; }
+  .section-row .shead h3{ font-family:'Newsreader', serif; font-weight:600; font-style:italic; font-size:19px; margin:0; }
+  .section-row .shead .more{ font-size:12px; color:var(--gold-soft); font-weight:600; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px 17px; margin-bottom:12px; }
+  .escape-hint{ text-align:center; font-size:11px; color:var(--ink-dim); opacity:0.7; padding:18px 0 4px; }
+  .section-title{ font-family:'Newsreader', serif; font-style:italic; font-size:19px; color:var(--sage-dark); margin:22px 0 12px; }
+
+  /* promo row (diğer bölümler) */
+  .promo-row{ display:flex; gap:10px; overflow-x:auto; padding-bottom:4px; margin-bottom:20px; -webkit-overflow-scrolling:touch; }
+  .promo{
+    flex:0 0 auto; width:150px; height:120px; border-radius:18px; padding:14px;
+    display:flex; flex-direction:column; justify-content:space-between; cursor:pointer; color:#F3EFE3;
+    background:linear-gradient(160deg, #5C7253, #36452F);
+  }
+  .promo.alt{ background:linear-gradient(160deg, #8C6A2E, #5C4720); }
+  .promo .tag{ font-size:9.5px; letter-spacing:1.5px; text-transform:uppercase; opacity:0.85; }
+  .promo .ttl{ font-family:'Newsreader', serif; font-style:italic; font-size:16px; line-height:1.25; }
+
+  /* feed */
+  .feed-subnav{ display:flex; gap:8px; }
+  .feed-subnav .fsub{
+    flex:1; background:var(--bg-soft); border:1px solid var(--line); color:var(--ink-dim);
+    border-radius:12px; padding:10px; font-family:inherit; font-weight:600; font-size:13px; cursor:pointer;
+  }
+  .feed-subnav .fsub.active{ background:var(--sage-dark); color:#F3EFE3; border-color:var(--sage-dark); }
+  .feed-head{ display:flex; align-items:center; justify-content:space-between; padding:12px 0 10px; }
+  .feed-progress{ display:flex; gap:4px; flex:1; flex-wrap:wrap; }
+  .feed-progress .dot{ width:6px; height:6px; border-radius:50%; background:var(--line); }
+  .feed-progress .dot.seen{ background:var(--gold); }
+  .feed-streak{ font-size:12px; color:var(--ember); white-space:nowrap; margin-left:10px; font-weight:700; }
+  .feed-scroll{
+    height:55vh; min-height:380px; max-height:480px; overflow-y:auto; scroll-snap-type:y mandatory;
+    -webkit-overflow-scrolling:touch; overscroll-behavior-y:auto;
+    border-radius:var(--radius); border:1px solid var(--line);
+  }
+  .feed-card{
+    scroll-snap-align:start; height:55vh; min-height:380px; max-height:480px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:36px 26px; position:relative; text-align:center;
+  }
+  .feed-card .cat{ font-size:11px; letter-spacing:2px; text-transform:uppercase; margin-bottom:18px; font-weight:700; }
+  .feed-card .body{ font-family:'Newsreader', serif; font-style:italic; font-size:21px; line-height:1.65; }
+  .feed-card .note{ margin-top:16px; font-size:14.5px; opacity:0.8; font-family:'Vazirmatn'; font-style:normal; }
+  .feed-card .ref{ margin-top:14px; font-size:11.5px; opacity:0.65; letter-spacing:0.5px; font-family:'Vazirmatn'; font-style:normal; }
+  .feed-card .fav{
+    position:absolute; top:18px; right:18px; background:rgba(255,255,255,0.5); border:none;
+    width:38px; height:38px; border-radius:50%; font-size:17px; cursor:pointer; color:var(--ink);
+  }
+  .feed-card .fav.active{ color:var(--ember); }
+  .feed-card.t-ayet{ background:linear-gradient(165deg, #E5ECDB, #D2DEC4); color:var(--sage-dark); }
+  .feed-card.t-hadis{ background:linear-gradient(165deg, #EFE7D2, #E3D7B8); color:var(--gold-soft); }
+  .feed-card.t-terim{ background:linear-gradient(165deg, #E9E1EF, #D9C9E3); color:#6B4E78; }
+  .feed-card.t-kissa{ background:linear-gradient(165deg, #F1E2CE, #E5CBA6); color:#9A6A2E; }
+  .feed-card.t-dua{ background:linear-gradient(165deg, #DCE5EA, #C7D6DE); color:#4E6378; }
+  .feed-card.t-sunnet{ background:linear-gradient(165deg, #E2E8D6, #CEDABF); color:#56683F; }
+  .feed-card.t-fazilet{ background:linear-gradient(165deg, #F0DCE2, #E3C2CC); color:#94495C; }
+  .feed-card.t-end{ background:linear-gradient(165deg, #4F6149, #36452F); color:#F3EFE3; }
+  .feed-card.t-end .big-mark{ font-family:'Newsreader', serif; font-style:italic; font-size:26px; color:#F3EFE3; margin-bottom:14px; }
+  .more-btn{
+    margin-top:18px; max-width:220px; padding:12px 18px; border-radius:14px; border:1px solid rgba(255,255,255,0.4);
+    background:rgba(255,255,255,0.12); color:#F3EFE3; font-weight:700; font-size:13.5px; cursor:pointer; font-family:inherit;
+  }
+
+  /* esma */
+  .esma-today{
+    text-align:center; padding:24px 18px; background:linear-gradient(160deg, #EFE9D8, #DCE3D1);
+  }
+  .esma-today .label{ font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold-soft); }
+  .esma-today .tr{ font-family:'Newsreader', serif; font-style:italic; font-size:22px; margin-top:8px; color:var(--sage-dark); }
+  .esma-today .mean{ font-size:13.5px; color:var(--ink-dim); margin-top:6px; }
+  .esma-search{
+    width:100%; background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:11px 13px; color:var(--ink); font-family:inherit; font-size:14px; margin:12px 0;
+  }
+  .esma-list{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .esma-row{ display:flex; flex-direction:column; gap:2px; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:10px 12px; }
+  .esma-row .no{ font-size:10px; color:var(--ink-dim); }
+  .esma-row .info{ min-width:0; }
+  .esma-row .tname{ font-weight:700; font-size:13px; color:var(--sage-dark); line-height:1.25; }
+  .esma-row .tmean{ font-size:11px; color:var(--ink-dim); margin-top:2px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+
+  /* namaz / sureler */
+  .namaz-intro{ font-size:13px; color:var(--ink-dim); line-height:1.6; }
+  .nstep{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:17px 18px; margin-bottom:12px; }
+  .nstep .head{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .nstep .num{
+    width:26px; height:26px; border-radius:50%; background:var(--bg-soft); color:var(--gold-soft);
+    display:flex; align-items:center; justify-content:center; font-size:12px; flex:0 0 auto; font-weight:700;
+  }
+  .nstep .title{ font-weight:700; font-size:15px; color:var(--sage-dark); }
+  .nstep .translit{ font-family:'Newsreader', serif; font-style:italic; font-size:16px; color:var(--gold-soft); margin:8px 0 10px; line-height:1.6; }
+  .nstep .meal{ font-size:14.5px; line-height:1.7; color:var(--ink); }
+  .nstep .action{ margin-top:10px; font-size:12px; color:var(--sage); display:flex; gap:6px; align-items:flex-start; }
+  .nstep .action::before{ content:'✋'; flex:0 0 auto; }
+  .grp-title{ font-family:'Newsreader', serif; font-style:italic; font-size:16.5px; color:var(--gold-soft); margin:24px 0 10px; }
+  .grp-title:first-child{ margin-top:6px; }
+
+  /* qibla */
+  .qibla-card{ text-align:center; }
+  .qibla-wrap{ display:flex; justify-content:center; padding:10px 0 6px; }
+  .qibla-compass{
+    width:160px; height:160px; border-radius:50%; position:relative;
+    background:radial-gradient(circle, #FBF9F2, #ECE6D5);
+    border:1px solid var(--line); transition:transform .3s ease;
+  }
+  .qibla-n{
+    position:absolute; top:10px; left:50%; transform:translateX(-50%);
+    font-size:11px; font-weight:700; color:var(--ink-dim);
+  }
+  .qibla-needle{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    font-size:30px; transition:transform .25s ease;
+  }
+  .qibla-status{ font-size:12.5px; color:var(--ink-dim); margin:8px 0 14px; line-height:1.5; }
+  .locate-btn{
+    width:100%; padding:12px; border-radius:14px; border:1px solid var(--line);
+    background:var(--bg-soft); color:var(--sage-dark); font-weight:700; font-size:13.5px; cursor:pointer; font-family:inherit;
+  }
+
+  /* zikir */
+  .zikir-card{ text-align:center; padding:26px 18px; }
+  .zikir-count{ font-family:'Newsreader', serif; font-style:italic; font-size:50px; color:var(--gold-soft); }
+  .zikir-goal{ font-size:12px; color:var(--ink-dim); margin-top:2px; letter-spacing:0.5px; }
+  .zikir-btn{
+    margin-top:16px; width:120px; height:120px; border-radius:50%; border:none;
+    background:radial-gradient(circle at 35% 30%, var(--sage), var(--sage-dark));
+    color:#F3EFE3; font-weight:800; font-size:16px; cursor:pointer;
+    box-shadow:0 10px 22px rgba(79,97,73,0.3);
+  }
+  .zikir-btn:active{ transform:scale(0.96); }
+  .zikir-row{ display:flex; justify-content:center; gap:8px; margin-top:18px; flex-wrap:wrap; }
+  .chip{
+    background:var(--bg-soft); border:1px solid var(--line); color:var(--ink-dim);
+    border-radius:999px; padding:7px 14px; font-size:12.5px; cursor:pointer; font-family:inherit;
+  }
+  .chip:active{ background:var(--gold); color:#fff; }
+  .streak-line{ text-align:center; font-size:12px; color:var(--ember); margin-top:10px; font-weight:700; }
+  .zh-item{ display:flex; align-items:center; gap:12px; }
+  .zh-item .zcount{ font-family:'Newsreader', serif; font-style:italic; font-size:20px; color:var(--gold-soft); flex:0 0 auto; min-width:44px; text-align:center; }
+  .zh-item .zinfo{ flex:1; min-width:0; }
+  .zh-item .zlabel{ font-weight:700; font-size:13.5px; color:var(--sage-dark); }
+  .zh-item .zdate{ font-size:11px; color:var(--ink-dim); margin-top:2px; }
+  .zh-item .zdel{ flex:0 0 auto; background:none; border:none; color:var(--ink-dim); font-size:16px; cursor:pointer; }
+
+  /* favorites */
+  .fav-item{ display:flex; gap:12px; align-items:flex-start; }
+  .fav-item .ftxt{ flex:1; min-width:0; }
+  .fav-item .fcat{ font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold-soft); font-weight:700; }
+  .fav-item .fbody{ font-size:14px; line-height:1.6; margin-top:4px; }
+  .fav-item .fref{ font-size:11px; color:var(--ink-dim); margin-top:6px; }
+  .fav-item .funfav{ flex:0 0 auto; background:none; border:none; color:var(--ember); font-size:18px; cursor:pointer; }
+  .dua-card .ttl{ font-weight:700; font-size:14.5px; color:var(--sage-dark); margin-bottom:8px; }
+  .dua-card .when{ margin-top:8px; font-size:12px; color:var(--ink-dim); font-style:italic; }
+
+  /* bottom nav */
+  nav.tabs{
+    position:fixed; left:0; right:0; bottom:0; z-index:5;
+    display:flex; background:rgba(255,255,255,0.92); backdrop-filter:blur(14px);
+    border-top:1px solid var(--line); padding:10px 10px calc(10px + env(safe-area-inset-bottom));
+  }
+  nav.tabs button{
+    flex:1; background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:3px;
+    color:var(--ink-dim); font-family:inherit; font-size:9px; font-weight:600; cursor:pointer; padding:4px 0;
+    line-height:1.2;
+  }
+  nav.tabs button .icon{ width:19px; height:19px; }
+  nav.tabs button.active{ color:var(--sage-dark); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="brand-bar"><span class="bname">Seyr</span><span class="bslogan">Kalbin Yolculuğu</span></div>
+
+  <!-- FEED / HOME -->
+  <section class="panel active" id="panel-feed">
+    <div class="hero">
+      <svg class="leaf" viewBox="0 0 24 24"><path d="M12 2c5 1 8 5 8 10 0 5-4 8-8 10-4-2-8-5-8-10C4 7 7 3 12 2z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M12 4v16" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+      <h1>Hoş geldin</h1>
+      <blockquote id="heroQuote">…</blockquote>
+      <div class="src" id="heroQuoteRef"></div>
+      <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2c0 5 3 7 3 7s-3 1-3 6c0-5-3-6-3-6s3-2 3-7z"/><circle cx="12" cy="19" r="2.4"/></svg></div>
+    </div>
+
+    <div class="tile-grid">
+      <div class="tile" onclick="quickTile('feed','ayet')">
+        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M4 19V6a2 2 0 012-2h6v17H6a2 2 0 01-2-2z"/><path d="M20 19V6a2 2 0 00-2-2h-6v17h6a2 2 0 002-2z"/></svg></div>
+        <div class="lbl">Ayet</div>
+      </div>
+      <div class="tile" onclick="quickTile('feed','hadis')">
+        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 01-8.9 8.4 9 9 0 01-3.4-.8L3 20l1.1-5.4A8.4 8.4 0 1121 11.5z"/></svg></div>
+        <div class="lbl">Hadis</div>
+      </div>
+      <div class="tile" onclick="quickTile('feed','terim')">
+        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M6 4h11a2 2 0 012 2v14l-4-2-4 2-4-2-3 2V6a2 2 0 012-2z"/></svg></div>
+        <div class="lbl">Sözlük</div>
+      </div>
+      <div class="tile" onclick="switchTab('esma')">
+        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z"/></svg></div>
+        <div class="lbl">Esma</div>
+      </div>
+    </div>
+
+    <div class="section-row">
+      <div class="shead"><h3>Bugünün Akışı</h3><span class="feed-streak" id="feedStreak"></span></div>
+      <div class="feed-subnav" id="feedSubnav">
+        <button class="fsub active" data-ftype="ayet" onclick="switchFeedType('ayet')">Ayet</button>
+        <button class="fsub" data-ftype="hadis" onclick="switchFeedType('hadis')">Hadis</button>
+        <button class="fsub" data-ftype="terim" onclick="switchFeedType('terim')">Sözlük</button>
+      </div>
+      <div class="feed-head"><div class="feed-progress" id="feedProgress"></div></div>
+      <div class="feed-scroll" id="feedScroll"></div>
+    </div>
+
+    <div class="section-row">
+      <div class="shead"><h3>Diğer Bölümler</h3></div>
+      <div class="promo-row">
+        <div class="promo" onclick="switchTab('namaz')">
+          <div class="tag">İBADET</div>
+          <div class="ttl">Namaz Rehberi</div>
+        </div>
+        <div class="promo alt" onclick="switchTab('sureler')">
+          <div class="tag">SÛRELER</div>
+          <div class="ttl">Kısa Sûreler</div>
+        </div>
+        <div class="promo" onclick="switchTab('esma')">
+          <div class="tag">99 İSİM</div>
+          <div class="ttl">Esma-ül Hüsna</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESMA -->
+  <section class="panel" id="panel-esma">
+    <div class="page-head"><div class="eyebrow">99 İsim</div><h2>Esma-ül Hüsna</h2></div>
+    <div class="card esma-today" id="esmaToday"></div>
+    <input class="esma-search" id="esmaSearch" placeholder="İsim veya anlam ara…" oninput="renderEsmaList()">
+    <div class="esma-list" id="esmaList"></div>
+  </section>
+
+  <!-- NAMAZ -->
+  <section class="panel" id="panel-namaz">
+    <div class="page-head"><div class="eyebrow">Rehber</div><h2>Namaz</h2></div>
+    <div class="card namaz-intro">İki rekatlik bir namazda sırasıyla okunan dualar ve o anda yapılan hareketler aşağıda. Sıra takip ederek ilerleyebilirsin.</div>
+    <div id="namazSteps"></div>
+  </section>
+
+  <!-- SURELER -->
+  <section class="panel" id="panel-sureler">
+    <div class="page-head"><div class="eyebrow">Kur'an-ı Kerim</div><h2>Kısa Sûreler</h2></div>
+    <div class="card namaz-intro">Namazda Fâtiha'dan sonra (ilk iki rekatta) okunabilecek kısa sûrelerden bazıları, mealiyle.</div>
+    <div id="kisaSureler"></div>
+  </section>
+
+  <!-- DUALAR -->
+  <section class="panel" id="panel-dualar">
+    <div class="page-head"><div class="eyebrow">Günlük Hayat</div><h2>Dualar</h2></div>
+    <div class="card namaz-intro">Günün farklı anlarında okunabilecek kısa dualar, mealleriyle.</div>
+    <div id="dualarList"></div>
+  </section>
+
+  <!-- ÖĞRETİLER -->
+  <section class="panel" id="panel-ogretiler">
+    <div class="page-head"><div class="eyebrow">Temel Bilgiler</div><h2>Öğretiler</h2></div>
+    <div class="card namaz-intro">İslam'ın ve imanın temel şartları, 32 farz ve önemli sünnetler.</div>
+    <div id="ogretilerList"></div>
+  </section>
+
+  <!-- ARAÇLAR -->
+  <section class="panel" id="panel-araclar">
+    <div class="page-head"><div class="eyebrow">Araçlar</div><h2>Kıble, Zikir, Kayıtlar</h2></div>
+
+    <div class="grp-title">Kıble Yönü</div>
+    <div class="card qibla-card">
+      <div class="qibla-wrap">
+        <div class="qibla-compass" id="qiblaCompass">
+          <div class="qibla-n">K</div>
+          <div class="qibla-needle" id="qiblaNeedle">🕋</div>
+        </div>
+      </div>
+      <div class="qibla-status" id="qiblaStatus">Kıble yönünü görmek için konum ve pusula erişimine izin ver.</div>
+      <button class="locate-btn" id="qiblaBtn" onclick="startQibla()">Kıbleyi Bul</button>
+    </div>
+
+    <div class="grp-title">Zikir</div>
+    <div class="card zikir-card">
+      <div class="zikir-count" id="zikirCount">0</div>
+      <div class="zikir-goal" id="zikirGoalLabel"></div>
+      <button class="zikir-btn" id="zikirBtn" onclick="incrementZikir()">Çek</button>
+      <div class="zikir-row">
+        <button class="chip" onclick="setZikirGoal(33)">33</button>
+        <button class="chip" onclick="setZikirGoal(99)">99</button>
+        <button class="chip" onclick="setZikirGoal(100)">100</button>
+        <button class="chip" onclick="resetZikir()">Sıfırla</button>
+      </div>
+      <input class="esma-search" id="zikirLabel" placeholder="Hangi zikir? (opsiyonel, ör. Sübhanallah)" style="margin-top:14px;">
+      <button class="locate-btn" onclick="saveZikirSession()">Kaydet ve Sıfırla</button>
+      <div class="streak-line" id="zikirStreakLine"></div>
+    </div>
+    <div id="zikirHistory"></div>
+
+    <div class="grp-title">Kaydettiklerim</div>
+    <div id="favoritesList"></div>
+  </section>
+
+  <div class="escape-hint">Seyr — Kalbin Yolculuğu · kişisel kullanım için yapıldı</div>
+</div>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="feed">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+    Ana Sayfa
+  </button>
+  <button class="tab-btn" data-tab="esma">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 3l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z"/></svg>
+    Esma
+  </button>
+  <button class="tab-btn" data-tab="namaz">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 3a4 4 0 014 4c0 2-1 3-1 5H9c0-2-1-3-1-5a4 4 0 014-4z"/><path d="M5 12h14"/><path d="M7 12v8h10v-8"/></svg>
+    Namaz
+  </button>
+  <button class="tab-btn" data-tab="sureler">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M3 5c3 0 6 1 9 3 3-2 6-3 9-3v14c-3 0-6 1-9 3-3-2-6-3-9-3z"/></svg>
+    Sûreler
+  </button>
+  <button class="tab-btn" data-tab="dualar">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 8 2.5 4 6.5 4c2 0 3.5 1.2 4 2.8C11 5.2 12.5 4 14.5 4 18.5 4 20 8 18.5 12 16 16.5 12 21 12 21z"/></svg>
+    Dualar
+  </button>
+  <button class="tab-btn" data-tab="ogretiler">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 4l8 3.5v1L12 12 4 8.5v-1z"/><path d="M6 10v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg>
+    Öğretiler
+  </button>
+  <button class="tab-btn" data-tab="araclar">
+    <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7l2 5-2 5-2-5z"/></svg>
+    Araçlar
+  </button>
+</nav>
+
+<script>
+/* ---------- storage ---------- */
+const STORE_KEY = 'vird_v2';
+function loadState(){
+  try{ const raw = localStorage.getItem(STORE_KEY); if(raw) return JSON.parse(raw); }catch(e){}
+  return { feed: { favorites:{}, streak:0, lastDone:null, extra:0 }, zikir: { count:0, goal:33, date:null, streak:0, lastDone:null, history:[] } };
+}
+function saveState(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+let state = loadState();
+if(!state.feed){ state.feed = { favorites:{}, streak:0, lastDone:null, extra:0 }; saveState(); }
+if(!state.zikir){ state.zikir = { count:0, goal:33, date:null, streak:0, lastDone:null, history:[] }; saveState(); }
+if(!state.zikir.history){ state.zikir.history = []; saveState(); }
+
+/* ---------- date helpers ---------- */
+function todayStr(){
+  const d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function yesterdayStr(){
+  const d = new Date(); d.setDate(d.getDate()-1);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function applyStreakLogic(obj){
+  const t = todayStr();
+  if(obj.lastDone === t) return false;
+  if(obj.lastDone === yesterdayStr()){ obj.streak += 1; } else { obj.streak = 1; }
+  obj.lastDone = t;
+  return true;
+}
+function dayOfYear(){
+  const d = new Date(); const start = new Date(d.getFullYear(),0,0);
+  return Math.floor((d-start)/86400000);
+}
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ---------- tabs ---------- */
+function switchTab(name){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===name));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active', p.id==='panel-'+name));
+  if(name === 'araclar'){
+    try{ renderFavorites(); renderZikir(); renderZikirHistory(); }catch(e){}
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=> switchTab(btn.dataset.tab));
+});
+function quickTile(target, ftype){
+  switchTab(target);
+  if(ftype) setTimeout(()=>switchFeedType(ftype), 10);
+}
+
+/* ===================== FEED ===================== */
+const FEED_ITEMS = [
+  {type:'ayet', tl:'İnne mea\'l-usri yüsrâ', body:'Şüphesiz, zorlukla beraber bir kolaylık vardır.', ref:'İnşirah Sûresi, 6'},
+  {type:'ayet', tl:'Ve beşşiri\'s-sâbirîn', body:'Sabredenleri müjdele.', ref:'Bakara Sûresi, 155'},
+  {type:'ayet', tl:'Fezkürûnî ezkürküm', body:'Öyleyse siz beni anın ki ben de sizi anayım.', ref:'Bakara Sûresi, 152'},
+  {type:'ayet', tl:'Ve men yetevekkel alallâhi fe hüve hasbüh', body:'Kim Allah\'a tevekkül ederse O, ona yeter.', ref:'Talâk Sûresi, 3'},
+  {type:'ayet', tl:'Elâ bi zikrillâhi tatmainnü\'l-kulûb', body:'Bilesiniz ki, kalpler ancak Allah\'ı anmakla huzur bulur.', ref:'Ra\'d Sûresi, 28'},
+  {type:'ayet', tl:'Ve kur rabbi zidnî ilmâ', body:'De ki: Rabbim, ilmimi artır.', ref:'Tâhâ Sûresi, 114'},
+  {type:'ayet', tl:'İnnallâhe lâ yudîu ecra\'l-muhsinîn', body:'Şüphesiz Allah, iyilik edenlerin ecrini zayi etmez.', ref:'Tevbe Sûresi, 120'},
+  {type:'ayet', tl:'Ve nefsin ve mâ sevvâhâ. Fe elhemehâ fücûrahâ ve takvâhâ', body:'Nefse ve onu düzgün bir biçimde şekillendirip ona kötülük duygusunu ve takvasını ilham edene andolsun.', ref:'Şems Sûresi, 7-8'},
+  {type:'ayet', tl:'Ve hüve meaküm eyne mâ küntüm', body:'Nerede olursanız olun O sizinle beraberdir.', ref:'Hadîd Sûresi, 4'},
+  {type:'ayet', tl:'Fe inne mea\'l-usri yüsrâ', body:'Şüphesiz güçlükle beraber bir kolaylık vardır.', ref:'İnşirah Sûresi, 5'},
+  {type:'ayet', tl:'Lâ yükellifullâhü nefsen illâ vüs\'ahâ', body:'Allah, hiçbir kimseyi gücünün yetmeyeceği şeyle yükümlü kılmaz.', ref:'Bakara Sûresi, 286'},
+  {type:'ayet', tl:'Vesteînû bi\'s-sabri ve\'s-salâh', body:'Sabırla ve namazla yardım dileyin.', ref:'Bakara Sûresi, 45'},
+  {type:'ayet', body:'Şüphesiz Allah, sabredenlerle beraberdir.', ref:'Bakara Sûresi, 153'},
+  {type:'ayet', body:'Namaz, çirkin işlerden ve kötülükten alıkoyar.', ref:'Ankebût Sûresi, 45'},
+  {type:'ayet', body:'Rabbinizden bağışlanma dileyin, sonra O\'na tövbe edin.', ref:'Hûd Sûresi, 3'},
+  {type:'ayet', body:'Kullarıma söyle, sözün en güzelini söylesinler.', ref:'İsrâ Sûresi, 53'},
+  {type:'ayet', body:'Sen, kötülüğü en güzel olan şeyle sav.', ref:'Hicr Sûresi, 85'},
+  {type:'ayet', body:'Müminler ancak kardeştirler.', ref:'Hucurât Sûresi, 10'},
+  {type:'ayet', body:'Şüphesiz Allah, adaleti ve iyilik yapmayı emreder.', ref:'Nahl Sûresi, 90'},
+  {type:'ayet', body:'De ki: Ey kendi nefisleri aleyhine aşırı giden kullarım! Allah\'ın rahmetinden ümit kesmeyin.', ref:'Zümer Sûresi, 53'},
+  {type:'ayet', body:'İyilikle kötülük bir olmaz; sen kötülüğü en güzel şekilde sav.', ref:'Fussilet Sûresi, 34'},
+  {type:'ayet', body:'Allah\'a ve Resûlüne itaat edin ki merhamet olunasınız.', ref:'Âl-i İmrân Sûresi, 132'},
+  {type:'ayet', body:'Şüphesiz biz Kur\'an\'ı düşünüp öğüt alasınız diye kolaylaştırdık.', ref:'Kamer Sûresi, 17'},
+  {type:'ayet', body:'Gevşemeyin, üzülmeyin; eğer inanıyorsanız üstün olan sizsiniz.', ref:'Âl-i İmrân Sûresi, 139'},
+  {type:'ayet', body:'Şüphesiz biz insanı en güzel biçimde yarattık.', ref:'Tîn Sûresi, 4'},
+  {type:'ayet', body:'Allah, bir toplumun durumunu, kendileri değiştirmedikçe değiştirmez.', ref:'Ra\'d Sûresi, 11'},
+  {type:'ayet', body:'Rabbiniz buyurdu ki: Bana dua edin, duanızı kabul edeyim.', ref:'Mü\'min Sûresi, 60'},
+  {type:'ayet', body:'Şüphesiz biz, Kur\'an\'ı zikir (öğüt) olarak indirdik; onu koruyacak olan da biziz.', ref:'Hicr Sûresi, 9'},
+  {type:'ayet', body:'Kim bir iyilik yaparsa kendi lehinedir; kim kötülük yaparsa kendi aleyhinedir.', ref:'Fussilet Sûresi, 46'},
+  {type:'ayet', body:'Şüphesiz Allah, kendisine ortak koşulmasını bağışlamaz; bunun dışındakini dilediği kimse için bağışlar.', ref:'Nisâ Sûresi, 48'},
+  {type:'ayet', body:'Allah, tevbe edenleri ve temizlenenleri sever.', ref:'Bakara Sûresi, 222'},
+  {type:'ayet', body:'Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver, bizi ateş azabından koru.', ref:'Bakara Sûresi, 201'},
+  {type:'ayet', body:'Dünya hayatı, ancak bir oyun ve oyalanmadır; ahiret yurdu ise gerçek hayatın ta kendisidir.', ref:'Ankebût Sûresi, 64'},
+
+  {type:'hadis', tl:'İnnemâ\'l-a\'mâlü bi\'n-niyyât', body:'Ameller ancak niyetlere göredir.', ref:'Buhârî, Bedü\'l-Vahy, 1'},
+  {type:'hadis', tl:'Ed-dînü\'n-nasîhah', body:'Din nasihattir.', ref:'Müslim, Îmân, 95'},
+  {type:'hadis', tl:'Men lâ yerham lâ yurham', body:'Merhamet etmeyene merhamet olunmaz.', ref:'Buhârî, Edeb, 18'},
+  {type:'hadis', tl:'El-kelimetü\'t-tayyibetü sadakah', body:'Güzel söz sadakadır.', ref:'Buhârî, Cihâd, 128'},
+  {type:'hadis', tl:'Hayruküm men teallemel-Kur\'âne ve allemeh', body:'Sizin en hayırlınız, Kur\'an\'ı öğrenen ve öğretendir.', ref:'Buhârî, Fedâilü\'l-Kur\'an, 21'},
+  {type:'hadis', tl:'Tebessümüke fî vechi ahîke sadakah', body:'Kardeşinin yüzüne gülümsemen bile sadakadır.', ref:'Tirmizî, Birr, 36'},
+  {type:'hadis', tl:'Men kâne yu\'minü billâhi ve\'l-yevmi\'l-âhiri felyekul hayran ev liyasmut', body:'Allah\'a ve ahiret gününe inanan ya hayır söylesin ya da sussun.', ref:'Buhârî, Edeb, 31'},
+  {type:'hadis', tl:'El-mü\'minü\'l-kaviyyü hayrun ve ehabbü ilallâhi mine\'l-mü\'mini\'d-daîf', body:'Güçlü mümin, Allah katında zayıf müminden daha hayırlı ve daha sevimlidir.', ref:'Müslim, Kader, 34'},
+  {type:'hadis', tl:'Lâ yu\'minü ehadüküm hattâ yuhibbe li ahîhi mâ yuhibbu li nefsih', body:'Sizden biri, kendisi için istediğini kardeşi için de istemedikçe gerçek anlamda iman etmiş olmaz.', ref:'Buhârî, Îmân, 7'},
+  {type:'hadis', body:'Müslüman, elinden ve dilinden diğer Müslümanların güvende olduğu kişidir.', ref:'Buhârî, Îmân, 4'},
+  {type:'hadis', body:'Kolaylaştırın, zorlaştırmayın; müjdeleyin, nefret ettirmeyin.', ref:'Buhârî, İlim, 11'},
+  {type:'hadis', body:'Allah güzeldir, güzelliği sever.', ref:'Müslim, Îmân, 147'},
+  {type:'hadis', body:'Kim bir kötülük görürse onu eliyle düzeltsin; gücü yetmezse diliyle; ona da gücü yetmezse kalbiyle karşı çıksın — bu imanın en zayıf derecesidir.', ref:'Müslim, Îmân, 78'},
+  {type:'hadis', body:'Ben, güzel ahlakı tamamlamak için gönderildim.', ref:'Muvatta, Hüsnü\'l-Hulk, 8'},
+  {type:'hadis', body:'Allah katında amellerin en sevimlisi, az da olsa devamlı olanıdır.', ref:'Buhârî, Rikak, 18'},
+  {type:'hadis', body:'Veren el, alan elden hayırlıdır.', ref:'Buhârî, Zekât, 18'},
+  {type:'hadis', body:'İlim öğrenmek, her Müslümana farzdır.', ref:'İbn Mâce, Mukaddime, 17'},
+  {type:'hadis', body:'Kişi, sevdiğiyle beraberdir.', ref:'Buhârî, Edeb, 96'},
+  {type:'hadis', body:'İki nimet vardır ki insanların çoğu bunlarda aldanmıştır: Sağlık ve boş vakit.', ref:'Buhârî, Rikak, 1'},
+  {type:'hadis', body:'Kıyamet günü kulun ilk hesaba çekileceği şey namazdır.', ref:'Tirmizî, Salât, 188'},
+  {type:'hadis', body:'Cennet, annelerin ayakları altındadır.', ref:'Nesâî, Cihâd, 6'},
+  {type:'hadis', body:'Mümin tek bir delikten iki kere ısırılmaz.', ref:'Buhârî, Edeb, 83'},
+  {type:'hadis', body:'Allah, sizin bedenlerinize ve suretlerinize değil, kalplerinize ve amellerinize bakar.', ref:'Müslim, Birr, 33'},
+  {type:'hadis', body:'Sadaka, malı eksiltmez.', ref:'Müslim, Birr, 69'},
+  {type:'hadis', body:'Kim Allah için tevazu gösterirse, Allah onu yükseltir.', ref:'Müslim, Birr, 69'},
+  {type:'hadis', body:'Mümin, başına gelen her şeyde hayırla karşılanır; bu yalnız mümine has bir özelliktir.', ref:'Müslim, Zühd, 64'},
+
+  {type:'terim', body:'Tevekkül', note:'Çalışıp gerekli sebeplere sarıldıktan sonra sonucu Allah\'a bırakmak. Tembellik değil, güven duygusudur.'},
+  {type:'terim', body:'Takva', note:'Allah\'a karşı sorumluluk bilinci; kalbin sürekli Allah\'ın gözetiminde olduğunu hissetmesi.'},
+  {type:'terim', body:'İhsan', note:'Allah\'ı görüyormuşçasına ibadet etmek; göremesen de O\'nun seni gördüğünü bilerek yaşamak.'},
+  {type:'terim', body:'Şükür', note:'Bir nimeti, onu verenin rızasına uygun şekilde kullanmak — sadece dille değil, davranışla da.'},
+  {type:'terim', body:'Sabır', note:'Zorlukta isyan etmeden, ümidi kaybetmeden dayanmak; aynı zamanda günahtan uzak durma direnci.'},
+  {type:'terim', body:'İstiğfar', note:'Allah\'tan bağışlanma dilemek; sadece söz değil, hatadan dönme niyetiyle birlikte.'},
+  {type:'terim', body:'Tefekkür', note:'Yaratılış üzerine, ayetler üzerine derinlemesine düşünmek; ezbersiz, kalple anlamaya çalışmak.'},
+  {type:'terim', body:'Tevbe', note:'Hatadan pişman olup Allah\'a dönmek; geçmişe üzülmek, geleceğe dair niyet etmek.'},
+  {type:'terim', body:'Rıza', note:'Allah\'ın takdirine, hem darlıkta hem genişlikte gönülden razı olmak.'},
+  {type:'terim', body:'İhlas', note:'Bir ameli sadece Allah rızası için yapmak; gösteriş ve başkalarının beğenisinden arınmak.'},
+  {type:'terim', body:'Vera', note:'Şüpheli şeylerden bile uzak durarak haramdan kesin biçimde kaçınmak.'},
+  {type:'terim', body:'Zikir', note:'Allah\'ı anmak; dil ile, kalp ile veya davranışla sürekli O\'nu hatırlamak.'},
+
+  {type:'kissa', body:'Hz. Ömer (r.a.), halife iken sırtında un çuvalıyla aç bir aileye yardıma giderken görülmüştü. "Bırak ben taşıyayım" diyenlere "Kıyamet günü günahımı da sen mi taşıyacaksın?" demişti.', note:'Liderlik, sorumluluğu başkasına devretmek değil bizzat üstlenmektir.'},
+  {type:'kissa', body:'Bilal-i Habeşi (r.a.), işkence altında bile "Ehad, Ehad" (Allah birdir) demeye devam etti. İmanından asla taviz vermedi.', note:'Zorluk, imanın gerçek sınavıdır.'},
+  {type:'kissa', body:'Hz. Peygamber (s.a.v.), kendisine eziyet eden komşusu hastalanınca onu ziyarete gitti. Komşusu bu davranıştan çok etkilenip Müslüman oldu.', note:'Güzel ahlak, en etkili davettir.'},
+  {type:'kissa', body:'Üveys el-Karânî, annesine bakmak için Hz. Peygamber\'i (s.a.v.) hiç göremedi, ama O\'nun en çok övdüğü kişilerden biri oldu.', note:'Sevap, görünürlükle değil, samimiyetle ölçülür.'},
+  {type:'kissa', body:'Hz. Yusuf, zindanda yıllarca haksız yere kaldı ama asla Allah\'a olan güvenini kaybetmedi; sonunda Mısır\'a vezir oldu.', note:'Sabrın karşılığı, beklenmedik şekillerde gelebilir.'},
+  {type:'kissa', body:'Hz. Hatice (r.a.), Hz. Peygamber\'e (s.a.v.) vahyin ilk geldiği o zor anda en büyük destek oldu, asla tereddüt etmedi.', note:'Gerçek dostluk, en belirsiz anlarda yanında olmaktır.'},
+  {type:'kissa', body:'Selman-ı Farisi, hakikati bulmak için ülkeler dolaştı, yıllarca arandı; sonunda İslam\'a ulaştı.', note:'Hakiki arayış asla boşa gitmez.'},
+
+  {type:'dua', tl:'Rabbenâ âtinâ fi\'d-dünyâ haseneten ve fi\'l-âhirati haseneten ve kınâ azâbennâr', body:'Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver. Bizi ateş azabından koru.', ref:'Bakara Sûresi, 201'},
+  {type:'dua', tl:'Rabbişrah lî sadrî ve yessir lî emrî', body:'Rabbim! Göğsümü genişlet, işimi kolaylaştır.', ref:'Tâhâ Sûresi, 25-26'},
+  {type:'dua', tl:'Hasbünallâhü ve ni\'me\'l-vekîl', body:'Allah bize yeter, O ne güzel vekildir.', ref:'Âl-i İmrân Sûresi, 173'},
+  {type:'dua', tl:'Rabbi zidnî ilmen vefhemnî', body:'Rabbim, ilmimi artır ve beni anlayışlı kıl.', note:'Günlük okunabilecek kısa bir dua'},
+  {type:'dua', tl:'Allâhümme einnî alâ zikrike ve şükrike ve hüsni ibâdetik', body:'Allah\'ım! Seni anmama, sana şükretmeme ve sana güzelce kulluk etmeme yardım eyle.', ref:'Ebû Dâvûd, Vitr, 26'},
+  {type:'dua', tl:'Rabbenâ lâ tüziğ kulûbenâ ba\'de iz hedeytenâ', body:'Rabbimiz! Bizi doğru yola ilettikten sonra kalplerimizi eğriltme.', ref:'Âl-i İmrân Sûresi, 8'},
+
+  {type:'sunnet', body:'Yemekten önce ve sonra "Bismillah" demek, sonunda Allah\'a hamd etmek.', note:'Küçük bir alışkanlık, gün boyu sürekli zikir hâline gelir.'},
+  {type:'sunnet', body:'Eve girerken selam vermek, sağ ayakla girip sol ayakla çıkmak.', note:'Günlük hareketleri bile niyetle anlamlandırmanın bir yolu.'},
+  {type:'sunnet', body:'Uyumadan önce abdest alıp sağ tarafa yatmak, günün muhasebesini yapmak.', note:'Günü bilinçli kapatmak, ertesi günü de etkiler.'},
+  {type:'sunnet', body:'Misafire ikramda bulunmak ve güler yüzle karşılamak.', note:'"Misafirine ikram eden, Allah\'a ve ahiret gününe iman etmiş olur" buyrulmuştur.'},
+  {type:'sunnet', body:'Selamı önce vermek; yürüyenin oturana, küçüğün büyüğe selam vermesi.', note:'Selam, toplumda güveni ve sevgiyi büyüten küçük bir adımdır.'},
+
+  {type:'fazilet', body:'Sadaka, malı eksiltmez; aksine bereketlendirir.', note:'Maddi kayıp gibi görünen şey, manevi kazançtır.'},
+  {type:'fazilet', body:'Ana-babaya iyilik (birr), cennete giden en kısa yollardan biri olarak anlatılır.', note:'Evdeki en küçük nezaket bile büyük bir ameldir.'},
+  {type:'fazilet', body:'İlim öğrenmek için yola çıkan kişi, dönene kadar Allah yolundadır sayılır.', note:'Öğrenme niyeti başlı başına bir ibadettir.'},
+  {type:'fazilet', body:'Bir mümini sevindirmek, ona yardım etmek, büyük sevap kapılarından biridir.', note:'Küçük bir yardım, görünenden daha ağır basabilir.'},
+  {type:'fazilet', body:'Sabah-akşam okunan kısa zikirler, kişiyi gün boyu koruyan bir kalkan gibidir.', note:'Düzenlilik, miktardan daha değerlidir.'}
+];
+
+function seededShuffle(arr, seed){
+  const a = arr.slice(); let s = seed;
+  for(let i=a.length-1;i>0;i--){
+    s = (s*9301+49297) % 233280;
+    const j = Math.floor((s/233280)*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function dateSeed(){
+  const t = todayStr(); let h = 0;
+  for(let i=0;i<t.length;i++) h = (h*31 + t.charCodeAt(i)) % 100000;
+  return h;
+}
+const FEED_STACK_SIZE = 14;
+let feedStack = [];
+let currentFeedType = 'ayet';
+function switchFeedType(type){
+  currentFeedType = type;
+  document.querySelectorAll('.fsub').forEach(b=>b.classList.toggle('active', b.dataset.ftype===type));
+  renderFeed();
+}
+function buildFeedStack(){
+  const indices = FEED_ITEMS.map((_,i)=>i).filter(i=>FEED_ITEMS[i].type===currentFeedType);
+  const order = seededShuffle(indices, dateSeed()+currentFeedType.length);
+  feedStack = order.slice(0, FEED_STACK_SIZE);
+  if(state.feed.extra){
+    const remaining = order.slice(FEED_STACK_SIZE);
+    feedStack = feedStack.concat(remaining.slice(0, state.feed.extra));
+  }
+}
+function catLabel(type){
+  return {ayet:'Ayet', hadis:'Hadis', terim:'Sözlük', kissa:'Kıssa', dua:'Dua', sunnet:'Sünnet', fazilet:'Fazilet'}[type] || '';
+}
+function feedCardHtml(item, gIdx, posIdx){
+  const favKey = 'item_'+gIdx;
+  const isFav = !!state.feed.favorites[favKey];
+  return `<div class="feed-card t-${item.type}" data-pos="${posIdx}">
+    <button class="fav ${isFav?'active':''}" onclick="toggleFav('${favKey}', this)">${isFav?'♥':'♡'}</button>
+    <div class="cat">${catLabel(item.type)}</div>
+    <div class="body">${escapeHtml(item.body)}</div>
+    ${item.note ? `<div class="note">${escapeHtml(item.note)}</div>` : ''}
+    ${item.ref ? `<div class="ref">${escapeHtml(item.ref)}</div>` : ''}
+  </div>`;
+}
+function renderFeed(){
+  buildFeedStack();
+  const scroll = document.getElementById('feedScroll');
+  const progress = document.getElementById('feedProgress');
+  progress.innerHTML = feedStack.map((_,i)=>`<div class="dot" id="fdot-${i}"></div>`).join('');
+  scroll.innerHTML = feedStack.map((itemIdx,i)=>feedCardHtml(FEED_ITEMS[itemIdx], itemIdx, i)).join('')
+    + `<div class="feed-card t-end" id="feedEnd">
+        <div class="big-mark">Bugünlük bu kadar</div>
+        <div class="body">Yarın yeni bir akış seni bekliyor. İstersen birkaç tane daha görebilirsin.</div>
+        <button class="more-btn" onclick="extendFeed()">Birkaç tane daha göster</button>
+      </div>`;
+  document.getElementById('feedStreak').textContent = state.feed.streak>0 ? '🔥 '+state.feed.streak+' gün' : '';
+  try{ setupFeedObserver(); }catch(e){ console.error('Feed observer failed', e); }
+}
+function extendFeed(){
+  state.feed.extra = (state.feed.extra||0) + 3;
+  saveState();
+  renderFeed();
+}
+function toggleFav(key, btn){
+  state.feed.favorites[key] = !state.feed.favorites[key];
+  saveState();
+  btn.classList.toggle('active');
+  btn.textContent = state.feed.favorites[key] ? '♥' : '♡';
+}
+let feedObserver = null;
+function setupFeedObserver(){
+  if(typeof IntersectionObserver === 'undefined') return;
+  if(feedObserver) feedObserver.disconnect();
+  feedObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting && e.intersectionRatio > 0.6){
+        if(e.target.id === 'feedEnd'){
+          if(applyStreakLogic(state.feed)){ saveState(); document.getElementById('feedStreak').textContent = '🔥 '+state.feed.streak+' gün'; }
+        } else {
+          const dot = document.getElementById('fdot-'+e.target.dataset.pos);
+          if(dot) dot.classList.add('seen');
+        }
+      }
+    });
+  }, {root: document.getElementById('feedScroll'), threshold:0.6});
+  document.querySelectorAll('.feed-card').forEach(c=>feedObserver.observe(c));
+}
+
+/* ===================== ESMA-ÜL HÜSNA ===================== */
+const ESMA = [
+  ['الرحمن','Er-Rahmân','Dünyada herkese, ayrım yapmadan merhamet eden'],
+  ['الرحيم','Er-Rahîm','Ahirette müminlere has, sonsuz merhamet sahibi'],
+  ['الملك','El-Melik','Mutlak hükümranlık sahibi, gerçek hükümdar'],
+  ['القدوس','El-Kuddûs','Her türlü eksiklikten münezzeh, tertemiz'],
+  ['السلام','Es-Selâm','Her türlü tehlikeden selamette olan, esenlik veren'],
+  ['المؤمن','El-Mü\'min','Güven veren, kullarına emniyet bahşeden'],
+  ['المهيمن','El-Müheymin','Her şeyi gözetip koruyan, denetleyen'],
+  ['العزيز','El-Azîz','Karşı konulamaz izzet ve güç sahibi'],
+  ['الجبار','El-Cebbâr','Dilediğini yapan, eksikleri tamamlayan üstün kudret sahibi'],
+  ['المتكبر','El-Mütekebbir','Büyüklük yalnızca kendisine ait olan'],
+  ['الخالق','El-Hâlık','Yoktan var eden yaratıcı'],
+  ['البارئ','El-Bâri','Her şeyi kusursuz, uyumlu yaratan'],
+  ['المصور','El-Musavvir','Her varlığa kendine özgü bir şekil veren'],
+  ['الغفار','El-Gaffâr','Günahları tekrar tekrar bağışlayan'],
+  ['القهار','El-Kahhâr','Her şeye galip gelen, kahredici kudret sahibi'],
+  ['الوهاب','El-Vehhâb','Karşılıksız, sürekli bağışta bulunan'],
+  ['الرزاق','Er-Rezzâk','Bütün canlıların rızkını veren'],
+  ['الفتاح','El-Fettâh','Hayır kapılarını ve zorlukları açan, hükmeden'],
+  ['العليم','El-Alîm','Her şeyi en ince ayrıntısına kadar bilen'],
+  ['القابض','El-Kâbıd','Rızkı ve canı dilediğince daraltan'],
+  ['الباسط','El-Bâsıt','Rızkı ve nimeti dilediğince genişleten'],
+  ['الخافض','El-Hâfıd','Dilediğini alçaltan'],
+  ['الرافع','Er-Râfi\'','Dilediğini yükselten'],
+  ['المعز','El-Mu\'izz','Dilediğine izzet, şeref veren'],
+  ['المذل','El-Müzill','Dilediğini zillete düşüren'],
+  ['السميع','Es-Semî\'','Her sesi, her duayı işiten'],
+  ['البصير','El-Basîr','Her şeyi gizli açık gören'],
+  ['الحكم','El-Hakem','Mutlak adaletle hükmeden'],
+  ['العدل','El-Adl','Asla zulmetmeyen, mutlak adalet sahibi'],
+  ['اللطيف','El-Latîf','İncelikle, fark ettirmeden lütufta bulunan'],
+  ['الخبير','El-Habîr','Her şeyin iç yüzünden haberdar olan'],
+  ['الحليم','El-Halîm','Hemen cezalandırmayan, yumuşak davranan'],
+  ['العظيم','El-Azîm','Büyüklüğü akılla kavranamayacak kadar yüce'],
+  ['الغفور','El-Gafûr','Çokça bağışlayan, örten'],
+  ['الشكور','Eş-Şekûr','Az amele bile büyük karşılık veren'],
+  ['العلي','El-Aliyy','Her bakımdan en yüce olan'],
+  ['الكبير','El-Kebîr','Her şeyden büyük, kıyaslanamaz'],
+  ['الحفيظ','El-Hafîz','Her şeyi koruyup gözeten'],
+  ['المقيت','El-Mukît','Her canlının rızkını ve gücünü takdir eden'],
+  ['الحسيب','El-Hasîb','Herkesin hesabını gören, yeten'],
+  ['الجليل','El-Celîl','Azamet ve haşmet sahibi'],
+  ['الكريم','El-Kerîm','Karşılıksız çok cömert olan'],
+  ['الرقيب','Er-Rakîb','Her an her şeyi gözetleyen'],
+  ['المجيب','El-Mücîb','Duaları kabul eden, cevap veren'],
+  ['الواسع','El-Vâsi\'','İlmi, rahmeti ve nimeti her şeyi kuşatan'],
+  ['الحكيم','El-Hakîm','Her işi yerli yerinde, hikmetle yapan'],
+  ['الودود','El-Vedûd','Kullarını çok seven ve sevilmeye layık olan'],
+  ['المجيد','El-Mecîd','Şanı, şerefi ve cömertliği sonsuz olan'],
+  ['الباعث','El-Bâis','Ölüleri dirilten, peygamber gönderen'],
+  ['الشهيد','Eş-Şehîd','Her şeye şahit olan, hiçbir şey O\'ndan gizli kalmayan'],
+  ['الحق','El-Hak','Varlığı ve sözü mutlak gerçek olan'],
+  ['الوكيل','El-Vekîl','Kendisine güvenilenlerin işini en iyi şekilde yöneten'],
+  ['القوي','El-Kaviyy','Sonsuz kudret sahibi, asla güçsüz düşmeyen'],
+  ['المتين','El-Metîn','Kudreti hiç sarsılmayan, son derece sağlam'],
+  ['الولي','El-Veliyy','Müminlerin dostu, onlara yardımcı olan'],
+  ['الحميد','El-Hamîd','Bütün övgülere layık olan'],
+  ['المحصي','El-Muhsî','Her şeyi sayıca bilen, hiçbir şeyi eksik bırakmayan'],
+  ['المبدئ','El-Mübdi\'','Varlıkları ilk defa örneksiz yaratan'],
+  ['المعيد','El-Muîd','Yarattığını öldükten sonra tekrar diriltecek olan'],
+  ['المحيي','El-Muhyî','Hayat veren, dirilten'],
+  ['المميت','El-Mümît','Ölümü yaratan, öldüren'],
+  ['الحي','El-Hayy','Gerçek ve ezeli-ebedi hayat sahibi'],
+  ['القيوم','El-Kayyûm','Kendi kendine var olan, her şeyi ayakta tutan'],
+  ['الواجد','El-Vâcid','Dilediğini dilediği an bulan, hiçbir şeye muhtaç olmayan'],
+  ['الماجد','El-Mâcid','Şanı yüce, kerem sahibi'],
+  ['الواحد','El-Vâhid','Zatında, sıfatlarında eşi benzeri olmayan tek'],
+  ['الأحد','El-Ehad','Bölünmesi, parçalanması mümkün olmayan tek'],
+  ['الصمد','Es-Samed','Hiçbir şeye muhtaç olmayan, herkesin muhtaç olduğu'],
+  ['القادر','El-Kâdir','Dilediğini dilediği gibi yapmaya gücü yeten'],
+  ['المقتدر','El-Muktedir','Kudretiyle her şeye hükmeden, güç sahibi'],
+  ['المقدم','El-Mukaddim','Dilediğini öne alan, yükselten'],
+  ['المؤخر','El-Müahhir','Dilediğini geriye bırakan, erteleyen'],
+  ['الأول','El-Evvel','Varlığının başlangıcı olmayan, ezeli'],
+  ['الآخر','El-Âhir','Varlığının sonu olmayan, ebedi'],
+  ['الظاهر','Ez-Zâhir','Varlığı sayısız delille apaçık ortada olan'],
+  ['الباطن','El-Bâtın','Mahiyeti akılla tam kavranamayan, gizli'],
+  ['الوالي','El-Vâli','Bütün kâinatı yöneten, idare eden'],
+  ['المتعالي','El-Müteâlî','Her türlü eksiklikten sonsuzca yüce olan'],
+  ['البر','El-Berr','Kullarına çok iyilik ve ikramda bulunan'],
+  ['التواب','Et-Tevvâb','Tevbeleri kabul edip kuluna tekrar tekrar dönen'],
+  ['المنتقم','El-Müntakim','Zalimleri adaletiyle cezalandıran'],
+  ['العفو','El-Afüvv','Günahları affedip izlerini bile silen'],
+  ['الرؤوف','Er-Raûf','Sonsuz şefkat ve esirgeme sahibi'],
+  ['مالك الملك','Mâlikü\'l-Mülk','Bütün mülkün gerçek ve tek sahibi'],
+  ['ذو الجلال والإكرام','Zü\'l-Celâli ve\'l-İkrâm','Hem büyüklük hem cömertlik sahibi'],
+  ['المقسط','El-Muksit','Her işte adaleti gözeten'],
+  ['الجامع','El-Câmi\'','Dilediğini dilediği zaman bir araya getiren'],
+  ['الغني','El-Ganiyy','Hiçbir şeye asla muhtaç olmayan zengin'],
+  ['المغني','El-Muğnî','Dilediğini zengin kılan'],
+  ['المانع','El-Mâni\'','Dilemediği şeye engel olan, koruyan'],
+  ['الضار','Ed-Dârr','Hikmeti gereği zarar verecek şeyleri yaratan'],
+  ['النافع','En-Nâfi\'','Hayır ve fayda veren'],
+  ['النور','En-Nûr','Gökleri ve yeri aydınlatan, hidayet kaynağı'],
+  ['الهادي','El-Hâdî','Doğru yola ileten, kalbe hidayet veren'],
+  ['البديع','El-Bedî\'','Eşi benzeri olmayan, örneksiz yaratan'],
+  ['الباقي','El-Bâkî','Varlığının sonu olmayan, ebediyen kalıcı'],
+  ['الوارث','El-Vâris','Her şeyin gerçek ve nihai sahibi'],
+  ['الرشيد','Er-Reşîd','Her işi doğru bir sonuca götüren, irşad eden'],
+  ['الصبور','Es-Sabûr','Asilere karşı bile çok sabırlı olan']
+];
+function esmaToday(){
+  return ESMA[dayOfYear() % ESMA.length];
+}
+function renderEsmaToday(){
+  const [ar, tr, mean] = esmaToday();
+  document.getElementById('esmaToday').innerHTML = `
+    <div class="label">Günün İsmi</div>
+    <div class="tr">${escapeHtml(tr)}</div>
+    <div class="mean">${escapeHtml(mean)}</div>
+  `;
+}
+function renderEsmaList(){
+  const q = document.getElementById('esmaSearch').value.trim().toLocaleLowerCase('tr');
+  const list = document.getElementById('esmaList');
+  const filtered = ESMA.map((e,i)=>({e,i})).filter(({e})=>{
+    if(!q) return true;
+    return e[1].toLocaleLowerCase('tr').includes(q) || e[2].toLocaleLowerCase('tr').includes(q);
+  });
+  list.innerHTML = filtered.map(({e,i})=>`
+    <div class="esma-row">
+      <div class="no">${i+1}</div>
+      <div class="info">
+        <div class="tname">${escapeHtml(e[1])}</div>
+        <div class="tmean">${escapeHtml(e[2])}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ===================== NAMAZ ===================== */
+const NAMAZ_STEPS = [
+  {title:'Niyet', ar:null, translit:null, meal:'"Niyet ettim Allah rızası için namaz kılmaya" diye kalpten niyet edilir.', action:'Kıbleye dönülür, eller henüz kaldırılmaz.'},
+  {title:'İftitah Tekbiri', ar:'اللّٰهُ أَكْبَرُ', translit:'Allahüekber', meal:'Allah en büyüktür.', action:'Eller kulak hizasına kaldırılır, sonra bağlanır — namaza böylece başlanır.'},
+  {title:'Sübhâneke Duası', ar:'سُبْحَانَكَ اللّٰهُمَّ وَبِحَمْدِكَ وَتَبَارَكَ اسْمُكَ وَتَعَالَى جَدُّكَ وَلَا إِلَهَ غَيْرُكَ', translit:'Sübhâneke\'llâhümme ve bi hamdik, ve tebârekesmük, ve teâlâ ceddük, ve lâ ilâhe ğayruk', meal:'Allah\'ım! Seni eksikliklerden tenzih eder, hamd ile anarım. Adın mübarektir, şanın yücedir. Senden başka ilah yoktur.', action:'Eller bağlı, kıyamda (ayakta) okunur.'},
+  {title:'Eûzü-Besmele', ar:'أَعُوذُ بِاللّٰهِ مِنَ الشَّيْطَانِ الرَّجِيمِ. بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيمِ', translit:'Eûzü billâhi mineşşeytânirracîm. Bismillâhirrahmânirrahîm', meal:'Kovulmuş şeytanın şerrinden Allah\'a sığınırım. Rahman ve Rahim olan Allah\'ın adıyla.', action:'Fatiha\'dan hemen önce, içten okunur.'},
+  {title:'Fâtiha Sûresi', ar:'الْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمِينَ ۝ الرَّحْمٰنِ الرَّحِيمِ ۝ مَالِكِ يَوْمِ الدِّينِ ۝ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ۝ اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ', translit:'Elhamdü lillâhi rabbi\'l-âlemîn. Errahmâni\'r-rahîm. Mâliki yevmiddîn. İyyâke na\'büdü ve iyyâke nesta\'în. İhdine\'s-sırâta\'l-müstakîm', meal:'Hamd, âlemlerin Rabbi Allah\'a mahsustur. O, Rahman\'dır, Rahim\'dir. Din gününün sahibidir. Yalnız sana kulluk eder, yalnız senden yardım dileriz. Bizi doğru yola ilet.', action:'Her rekatta okunan, namazın temel sûresi.'},
+  {title:'Zammı Sûre (örnek: İhlâs)', ar:'قُلْ هُوَ اللّٰهُ أَحَدٌ ۝ اللّٰهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ', translit:'Kul hüvallâhü ehad. Allâhüssamed. Lem yelid ve lem yûled. Ve lem yekül lehû küfüven ehad', meal:'De ki: O, Allah\'tır, tektir. Allah Samed\'dir (hiçbir şeye muhtaç olmayan). Doğurmamış, doğurulmamıştır. Hiçbir şey O\'na denk değildir.', action:'İlk iki rekatta Fâtiha\'dan sonra kısa bir sûre eklenir.'},
+  {title:'Rükû Tekbiri ve Tesbihi', ar:'اللّٰهُ أَكْبَرُ. سُبْحَانَ رَبِّيَ الْعَظِيمِ', translit:'Allahüekber. Sübhâne rabbiye\'l-azîm', meal:'Allah en büyüktür. Yüce Rabbimi tüm noksanlıklardan tenzih ederim.', action:'Eğilip eller dizlere konur, sırt düz tutulur; tesbih en az 3 kez okunur.'},
+  {title:'Kavme (Doğrulma)', ar:'سَمِعَ اللّٰهُ لِمَنْ حَمِدَهُ. رَبَّنَا وَلَكَ الْحَمْدُ', translit:'Semiallâhü limen hamideh. Rabbenâ ve leke\'l-hamd', meal:'Allah, kendisine hamd edeni işitti. Rabbimiz, hamd yalnız sanadır.', action:'Rükûdan doğrulup tam dik durulur.'},
+  {title:'Secde Tekbiri ve Tesbihi', ar:'اللّٰهُ أَكْبَرُ. سُبْحَانَ رَبِّيَ الْأَعْلَى', translit:'Allahüekber. Sübhâne rabbiye\'l-a\'lâ', meal:'Allah en büyüktür. En yüce Rabbimi tüm noksanlıklardan tenzih ederim.', action:'Alın, burun, eller, dizler ve ayak parmakları yere değer; tesbih en az 3 kez okunur.'},
+  {title:'Celse (İki Secde Arası Oturuş)', ar:'اللّٰهُ أَكْبَرُ', translit:'Allahüekber', meal:'Allah en büyüktür.', action:'Secdeden kalkıp kısaca oturulur, sonra ikinci secdeye gidilir.'},
+  {title:'Ettehiyyâtü (Tahiyyât)', ar:'التَّحِيَّاتُ لِلّٰهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ. السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللّٰهِ وَبَرَكَاتُهُ. السَّلَامُ عَلَيْنَا وَعَلَى عِبَادِ اللّٰهِ الصَّالِحِينَ. أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللّٰهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ', translit:'Ettehiyyâtü lillâhi vessalavâtü vettayyibât. Esselâmü aleyke eyyühennebiyyü ve rahmetullâhi ve berakâtüh. Esselâmü aleynâ ve alâ ibâdillâhissâlihîn. Eşhedü en lâ ilâhe illallah ve eşhedü enne muhammeden abdühû ve rasûlüh', meal:'Bütün dualar, namazlar ve güzellikler Allah\'a mahsustur. Ey Peygamber, Allah\'ın selamı, rahmeti ve bereketi senin üzerine olsun. Selam bizim ve Allah\'ın iyi kullarının üzerine olsun. Şahitlik ederim ki Allah\'tan başka ilah yoktur; yine şahitlik ederim ki Muhammed O\'nun kulu ve elçisidir.', action:'Her oturuşta okunur; "eşhedü" derken şahadet parmağı kaldırılır.'},
+  {title:'Salli-Bârik Duaları', ar:'اللّٰهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ. اللّٰهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ', translit:'Allâhümme salli alâ muhammedin ve alâ âli muhammed. Allâhümme bârik alâ muhammedin ve alâ âli muhammed', meal:'Allah\'ım! Muhammed\'e ve Muhammed\'in ailesine salât eyle. Allah\'ım! Muhammed\'e ve Muhammed\'in ailesine bereket ver.', action:'Son oturuşta Tahiyyât\'tan sonra okunur.'},
+  {title:'Rabbenâ Duaları', ar:'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ ۝ رَبَّنَا اغْفِرْ لِي وَلِوَالِدَيَّ وَلِلْمُؤْمِنِينَ يَوْمَ يَقُومُ الْحِسَابُ ۝ رَبَّنَا ظَلَمْنَا أَنفُسَنَا وَإِن لَّمْ تَغْفِرْ لَنَا وَتَرْحَمْنَا لَنَكُونَنَّ مِنَ الْخَاسِرِينَ', translit:'Rabbenâ âtinâ fi\'d-dünyâ haseneten ve fi\'l-âhirati haseneten ve kınâ azâbennâr. Rabbenâğfirlî ve livâlideyye ve lilmü\'minîne yevme yekûmü\'l-hisâb. Rabbenâ zalemnâ enfüsenâ ve in lem tağfir lenâ ve terhamnâ lenekûnenne minel-hâsirîn', meal:'Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver, bizi ateş azabından koru. Rabbimiz! Hesabın görüleceği gün beni, anne-babamı ve müminleri bağışla. Rabbimiz! Biz kendimize zulmettik; eğer bizi bağışlamaz ve bize merhamet etmezsen mutlaka ziyana uğrayanlardan oluruz.', action:'Salli-Bârik\'ten sonra, selamdan önce okunur — bu üç kısa dua birlikte veya ayrı ayrı okunabilir.'},
+  {title:'Selam', ar:'السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللّٰهِ', translit:'Esselâmü aleyküm ve rahmetullah', meal:'Allah\'ın selamı ve rahmeti üzerinize olsun.', action:'Baş önce sağa, sonra sola çevrilir; namaz böylece tamamlanır.'}
+];
+function renderNamaz(){
+  const wrap = document.getElementById('namazSteps');
+  wrap.innerHTML = NAMAZ_STEPS.map((s,i)=>`
+    <div class="nstep">
+      <div class="head"><div class="num">${i+1}</div><div class="title">${escapeHtml(s.title)}</div></div>
+      ${s.translit ? `<div class="translit">${escapeHtml(s.translit)}</div>` : ''}
+      <div class="meal">${escapeHtml(s.meal)}</div>
+      <div class="action">${escapeHtml(s.action)}</div>
+    </div>
+  `).join('');
+}
+
+const KISA_SURELER = [
+  {name:'İhlâs Sûresi', tl:'Kul hüvallâhü ehad. Allâhüssamed. Lem yelid ve lem yûled. Ve lem yekün lehû küfüven ehad.', meal:'De ki: O, Allah\'tır, tektir. Allah Samed\'dir (hiçbir şeye muhtaç olmayan, herkesin muhtaç olduğu). Doğurmamış, doğurulmamıştır. Hiçbir şey O\'na denk değildir.'},
+  {name:'Felâk Sûresi', tl:'Kul eûzü bi rabbi\'l-felak. Min şerri mâ halak. Ve min şerri ğâsikın izâ vekab. Ve min şerri\'n-neffâsâti fi\'l-ukad. Ve min şerri hâsidin izâ hased.', meal:'De ki: Yarattığı şeylerin kötülüğünden, karanlığı çöktüğü zaman gecenin kötülüğünden, düğümlere üfleyenlerin kötülüğünden ve haset ettiği zaman hasetçinin kötülüğünden, sabahın Rabbine sığınırım.'},
+  {name:'Nâs Sûresi', tl:'Kul eûzü bi rabbi\'n-nâs. Meliki\'n-nâs. İlâhi\'n-nâs. Min şerri\'l-vesvâsi\'l-hannâs. Ellezî yüvesvisü fî sudûri\'n-nâs. Mine\'l-cinneti ve\'n-nâs.', meal:'De ki: İnsanların kalplerine vesvese veren, sinip gizlenen şeytanın kötülüğünden; insanların Rabbine, insanların hükümdarına, insanların ilahına sığınırım. Bu vesvese cinlerden de olur, insanlardan da.'},
+  {name:'Kevser Sûresi', tl:'İnnâ a\'taynâke\'l-kevser. Fesalli li rabbike venhar. İnne şânieke hüve\'l-ebter.', meal:'Şüphesiz biz sana Kevser\'i (çok hayır ve bereketi) verdik. Öyleyse Rabbin için namaz kıl ve kurban kes. Asıl soyu kesik olan, sana buğzedendir.'},
+  {name:'Kâfirûn Sûresi', tl:'Kul yâ eyyühe\'l-kâfirûn. Lâ a\'büdü mâ ta\'büdûn. Ve lâ entüm âbidûne mâ a\'büd. Ve lâ ene âbidün mâ abedtüm. Ve lâ entüm âbidûne mâ a\'büd. Leküm dînüküm ve liye dîn.', meal:'De ki: Ey kâfirler! Ben sizin taptıklarınıza tapmam. Siz de benim taptığıma tapacak değilsiniz. Ben de sizin taptıklarınıza tapacak değilim, siz de benim taptığıma tapacak değilsiniz. Sizin dininiz size, benim dinim banadır.'},
+  {name:'Nasr Sûresi', tl:'İzâ câe nasrullâhi ve\'l-feth. Ve raeyte\'n-nâse yedhulûne fî dînillâhi efvâcâ. Fe sebbih bi hamdi rabbike vestağfirh, innehû kâne tevvâbâ.', meal:'Allah\'ın yardımı ve fetih geldiğinde, insanların bölük bölük Allah\'ın dinine girdiğini gördüğünde, Rabbini hamd ile tesbih et ve O\'ndan bağışlanma dile. Şüphesiz O, tevbeleri çokça kabul edendir.'},
+  {name:'Tebbet (Mesed) Sûresi', tl:'Tebbet yedâ ebî lehebin ve teb. Mâ ağnâ anhü mâlühû ve mâ keseb. Seyaslâ nâren zâte leheb. Vemraetühû hammâletel-hatab. Fî cîdihâ hablün min mesed.', meal:'Ebû Leheb\'in elleri kurusun, zaten kurudu! Malı ve kazandıkları ona fayda vermedi. O, alevli bir ateşe girecektir. Karısı da, sırtında odun taşıyıcı olarak — boynunda hurma lifinden bükülmüş bir iple.'},
+  {name:'Asr Sûresi', tl:'Vel-asr. İnne\'l-insâne lefî husr. İllellezîne âmenû ve amilus-sâlihâti ve tevâsav bi\'l-hakkı ve tevâsav bi\'s-sabr.', meal:'Asra andolsun ki, insan gerçekten ziyandadır. Ancak iman edip salih ameller işleyenler, birbirlerine hakkı tavsiye edenler ve birbirlerine sabrı tavsiye edenler müstesna.'},
+  {name:'Fîl Sûresi', tl:'Elem tera keyfe feale rabbüke bi ashâbi\'l-fîl. Elem yec\'al keydehüm fî tadlîl. Ve ersele aleyhim tayran ebâbîl. Termîhim bi hicâratin min siccîl. Fe cealehüm ke asfin me\'kûl.', meal:'Rabbinin fil sahiplerine ne yaptığını görmedin mi? Onların tuzağını boşa çıkarmadı mı? Üzerlerine sürü sürü kuşlar gönderdi. Onlara pişkin balçıktan taşlar atıyorlardı. Sonunda onları yenilip çiğnenmiş ekin yaprağı gibi kıldı.'},
+  {name:'Kureyş Sûresi', tl:'Li îlâfi kureyş. Îlâfihim rihlete\'ş-şitâi ve\'s-sayf. Felya\'büdû rabbe hâze\'l-beyt. Ellezî at\'amehüm min cûin ve âmenehüm min havf.', meal:'Kureyş\'i alıştırdığı, onları kış ve yaz yolculuğuna alıştırdığı için, bu evin (Kâbe\'nin) Rabbine kulluk etsinler. O ki onları açlıktan doyurdu ve korkudan emin kıldı.'},
+  {name:'Mâûn Sûresi', tl:'Eraeytellezî yükezzibü bi\'d-dîn. Fezâlikellezî yedu\'u\'l-yetîm. Ve lâ yehuddu alâ taâmi\'l-miskîn. Fe veylün li\'l-musallîn. Ellezîne hüm an salâtihim sâhûn. Ellezîne hüm yürâûn. Ve yemneûne\'l-mâûn.', meal:'Dini yalanlayanı gördün mü? İşte o, yetimi itip kakan, yoksulu doyurmaya teşvik etmeyendir. Vay haline o namaz kılanların ki, onlar namazlarından gafildirler; gösteriş yaparlar ve en ufak bir yardımı bile esirgerler.'},
+  {name:'Duhâ Sûresi (ilk beş âyet)', tl:'Ved-duhâ. Velleyli izâ secâ. Mâ vedde\'ake rabbüke ve mâ kalâ. Ve lel-âhiretü hayrun leke mine\'l-ûlâ. Ve lesevfe yu\'tîke rabbüke fe terdâ.', meal:'Kuşluk vaktine andolsun. Sükûna erdiğinde geceye andolsun ki, Rabbin seni ne terk etti ne de sana darıldı. Senin için ahiret, dünyadan daha hayırlıdır. Rabbin sana verecek de hoşnut olacaksın.'},
+  {name:'İnşirah Sûresi', tl:'Elem neşrah leke sadrak. Ve veda\'nâ anke vizrak. Ellezî enkada zahrak. Ve refa\'nâ leke zikrak. Fe inne mea\'l-usri yüsrâ. İnne mea\'l-usri yüsrâ.', meal:'Senin göğsünü genişletmedik mi? Senden yükünü indirmedik mi? O ki sırtını çatırdatmıştı. Senin şanını yüceltmedik mi? Şüphesiz güçlükle beraber bir kolaylık vardır. Gerçekten güçlükle beraber bir kolaylık vardır.'}
+];
+function renderKisaSureler(){
+  const wrap = document.getElementById('kisaSureler');
+  wrap.innerHTML = KISA_SURELER.map(s=>`
+    <div class="nstep">
+      <div class="head"><div class="title">${escapeHtml(s.name)}</div></div>
+      <div class="translit">${escapeHtml(s.tl)}</div>
+      <div class="meal">${escapeHtml(s.meal)}</div>
+    </div>
+  `).join('');
+}
+
+
+/* ---------- hero (günün sözü) ---------- */
+function renderHero(){
+  const pool = FEED_ITEMS.filter(it=>it.type==='ayet' || it.type==='hadis');
+  const item = pool[dayOfYear() % pool.length];
+  document.getElementById('heroQuote').textContent = '\u201c' + item.body + '\u201d';
+  document.getElementById('heroQuoteRef').textContent = item.ref ? item.ref.toUpperCase() : (item.type==='hadis' ? 'HADÎS-İ ŞERİF' : 'AYET-İ KERÎME');
+}
+
+/* ===================== DUALAR ===================== */
+const DUALAR = [
+  {ttl:'Sabah Duası', body:'Allah\'ım! Senin sayende sabaha eriştik, senin sayende akşama ereriz. Hayat da, ölüm de senin elindedir; dönüş yalnız sanadır.', when:'Sabah uyanınca okunur.'},
+  {ttl:'Akşam Duası', body:'Allah\'ım! Senin sayende akşama eriştik, senin sayende sabaha ereriz. Hamd, yalnız Allah\'a mahsustur.', when:'Akşam vakti okunur.'},
+  {ttl:'Uyumadan Önce', body:'Allah\'ım! Senin adınla ölür (uyur), senin adınla dirilirim (uyanırım).', when:'Yatağa girip uyumadan önce okunur.'},
+  {ttl:'Uyanınca', body:'Bizi öldürdükten (uyuttuktan) sonra dirilten (uyandıran) Allah\'a hamd olsun; dönüş yalnız O\'nadır.', when:'Uykudan uyanınca okunur.'},
+  {ttl:'Yemekten Önce', body:'Allah\'ın adıyla, Allah\'ın bereketiyle.', when:'Yemeğe başlarken "Bismillah" denir.'},
+  {ttl:'Yemekten Sonra', body:'Bizi doyuran ve nimet veren Allah\'a hamd olsun; bu nimet O\'ndan bir lütuftur.', when:'Yemek bittikten sonra okunur.'},
+  {ttl:'Eve Girerken', body:'Allah\'ım! Girişimizde de çıkışımızda da senden hayır dilerim; Rabbimiz Allah\'a güvendik.', when:'Eve girerken, önce selam vererek okunur.'},
+  {ttl:'Evden Çıkarken', body:'Allah\'ın adıyla çıkıyorum; gücüm ve kuvvetim ancak Allah iledir.', when:'Evden çıkarken okunur.'},
+  {ttl:'Yolculuğa Çıkarken', body:'Allah\'ım! Yolculukta bize kolaylık ver, uzaklığını yakınlaştır. Allah\'ım, yolculukta arkadaş, ailemizde de vekil sensin.', when:'Yola çıkmadan önce okunur.'},
+  {ttl:'Yeni Bir İşe Başlarken', body:'Allah\'ım! Bu işimi hayırlı eyle, bana onda kolaylık ve başarı nasip eyle.', when:'Önemli bir işe veya göreve başlarken okunur.'},
+  {ttl:'Sıkıntı Anında', body:'Allah bize yeter, O ne güzel vekildir. Allah\'ım! Senin rahmetini umarım, beni bir göz açıp kapayıncaya kadar bile nefsimle baş başa bırakma.', when:'Zorluk, kaygı veya sıkıntı anında okunur.'},
+  {ttl:'Şükür Duası', body:'Allah\'ım! Sana nimetlerin için hamd olsun; verdiğin her şey için sana şükrederim, şükrümü artır.', when:'Bir nimete kavuşunca veya güzel bir haber alınca okunur.'},
+  {ttl:'Anne-Babaya Dua', body:'Rabbim! Onlar beni küçükken nasıl şefkatle büyüttülerse, sen de onlara öyle merhamet eyle.', when:'Anne-baba için her zaman okunabilecek bir duadır.'},
+  {ttl:'Hasta Ziyaretinde', body:'Üzüntüyü gideren Rabbimiz, sana sığınırız; şifa ver, sen şifa verensin. Senin şifandan başka şifa yoktur.', when:'Hasta ziyaretinde, hasta için okunur.'},
+  {ttl:'İstihare Duası (özet)', body:'Allah\'ım! İlminle hakkımda hayırlı olanı senden isterim. Eğer bu iş benim için hayırlıysa onu bana kolaylaştır, değilse benden uzaklaştır ve hayırlısını nasip et.', when:'Önemli bir karar öncesi iki rekat namaz kılınıp ardından okunan istihare duasının özetidir.'},
+  {ttl:'Bağışlanma (İstiğfar)', body:'Allah\'ım! Beni bağışla, bana merhamet et, beni doğru yola ilet, bana afiyet ve rızık ver.', when:'Günün herhangi bir anında, özellikle namaz sonrası okunabilir.'}
+];
+function renderDualar(){
+  const wrap = document.getElementById('dualarList');
+  wrap.innerHTML = DUALAR.map(d=>`
+    <div class="nstep dua-card">
+      <div class="ttl">${escapeHtml(d.ttl)}</div>
+      <div class="meal">${escapeHtml(d.body)}</div>
+      <div class="when">${escapeHtml(d.when)}</div>
+    </div>
+  `).join('');
+}
+
+/* ===================== ÖĞRETİLER ===================== */
+const ISLAM_SARTLARI = [
+  'Kelime-i şehadet getirmek (Allah\'tan başka ilah olmadığına ve Muhammed\'in O\'nun kulu ve elçisi olduğuna şahitlik etmek)',
+  'Namaz kılmak',
+  'Oruç tutmak (Ramazan ayında)',
+  'Zekât vermek (gücü yetenler için)',
+  'Hacca gitmek (gücü yetenler için, ömürde bir kez)'
+];
+const IMAN_SARTLARI = [
+  'Allah\'a iman etmek',
+  'Meleklere iman etmek',
+  'Kitaplara iman etmek',
+  'Peygamberlere iman etmek',
+  'Ahiret gününe iman etmek',
+  'Kadere, hayrın ve şerrin Allah\'tan olduğuna iman etmek'
+];
+const FARZ_32 = [
+  {grp:'İmanın Şartı (6)', items: IMAN_SARTLARI},
+  {grp:'İslam\'ın Şartı (5)', items: ISLAM_SARTLARI},
+  {grp:'Namazın Dışındaki Farzları (6)', items:[
+    'Hadesten taharet (abdestsizlik halinden temizlenmek)',
+    'Necasetten taharet (beden, elbise ve namaz kılınan yerin pis olmaktan temiz olması)',
+    'Setr-i avret (örtülmesi gereken yerleri örtmek)',
+    'İstikbal-i kıble (kıbleye yönelmek)',
+    'Vakit (namazı kendi vaktinde kılmak)',
+    'Niyet etmek'
+  ]},
+  {grp:'Namazın İçindeki Farzları (6)', items:[
+    'İftitah tekbiri (namaza başlarken "Allahüekber" demek)',
+    'Kıyam (ayakta durmak)',
+    'Kıraat (Kur\'an\'dan bir miktar okumak)',
+    'Rükû etmek',
+    'Secde etmek',
+    'Ka\'de-i ahire (son oturuşta Tahiyyât miktarı oturmak)'
+  ]},
+  {grp:'Abdestin Farzları (4)', items:[
+    'Yüzü yıkamak',
+    'Kolları dirseklerle beraber yıkamak',
+    'Başın dörtte birini meshetmek',
+    'Ayakları topuklarla beraber yıkamak'
+  ]},
+  {grp:'Guslün Farzları (3)', items:[
+    'Ağzı yıkamak (mazmaza)',
+    'Burnu yıkamak (istinşak)',
+    'Bütün bedeni yıkamak'
+  ]},
+  {grp:'Teyemmümün Farzları (2)', items:[
+    'Niyet etmek',
+    'Yüzü ve elleri (dirseklere kadar) meshetmek'
+  ]}
+];
+const NAMAZ_SUNNETLERI = [
+  'Ezan ve kamet okumak (cemaatle kılınan namazlarda)',
+  'Eller kaldırılarak tekbir almak',
+  'Sübhâneke duasını okumak',
+  'Eûzü-besmele çekmek',
+  'Fâtiha\'dan sonra kısa bir sûre okumak',
+  'Rükû ve secdede en az üç kez tesbih getirmek',
+  'İlk oturuşta (ka\'de-i ûlâ) sadece Tahiyyât miktarı oturmak',
+  'Tahiyyâttan sonra Salli-Bârik dualarını okumak',
+  'Selamdan önce Rabbenâ dualarını okumak'
+];
+const ABDEST_SUNNETLERI = [
+  'Abdeste niyet etmek',
+  '"Bismillah" diyerek başlamak',
+  'Elleri bileklere kadar yıkamak',
+  'Misvak kullanmak (veya dişleri fırçalamak)',
+  'Ağza ve buruna su vermek',
+  'Sakal ve parmak aralarını ovmak',
+  'Uzuvları üçer kez yıkamak',
+  'Sağdan başlamak',
+  'Kulakları ve boyunu meshetmek',
+  'Uzuvları sırasıyla, ara vermeden yıkamak'
+];
+function ogretiriList(items){
+  return `<div class="nstep"><div class="meal">${items.map((it,i)=>`<div style="margin-bottom:${i<items.length-1?'10px':'0'}"><b>${i+1}.</b> ${escapeHtml(it)}</div>`).join('')}</div></div>`;
+}
+function renderOgretiler(){
+  const wrap = document.getElementById('ogretilerList');
+  let html = '';
+  html += `<div class="grp-title">İslam'ın Şartları</div>` + ogretiriList(ISLAM_SARTLARI);
+  html += `<div class="grp-title">İmanın Şartları (Âmentü)</div>` + ogretiriList(IMAN_SARTLARI);
+  html += `<div class="grp-title">32 Farz</div>`;
+  html += FARZ_32.map(g => `<div class="nstep"><div class="title" style="margin-bottom:10px;">${escapeHtml(g.grp)}</div><div class="meal">${g.items.map((it,i)=>`<div style="margin-bottom:${i<g.items.length-1?'8px':'0'}">${i+1}. ${escapeHtml(it)}</div>`).join('')}</div></div>`).join('');
+  html += `<div class="grp-title">Namazın Sünnetleri</div>` + ogretiriList(NAMAZ_SUNNETLERI);
+  html += `<div class="grp-title">Abdestin Sünnetleri</div>` + ogretiriList(ABDEST_SUNNETLERI);
+  wrap.innerHTML = html;
+}
+
+/* ---------- zikir sayacı ---------- */
+function renderZikir(){
+  if(state.zikir.date !== todayStr()){ state.zikir.count = 0; state.zikir.date = todayStr(); saveState(); }
+  document.getElementById('zikirCount').textContent = state.zikir.count;
+  document.getElementById('zikirGoalLabel').textContent = 'Hedef: '+state.zikir.goal;
+  document.getElementById('zikirStreakLine').textContent = state.zikir.streak > 0 ? '🔥 '+state.zikir.streak+' gün üst üste hedefe ulaştın' : '';
+}
+function incrementZikir(){
+  state.zikir.count += 1;
+  if(state.zikir.count === state.zikir.goal){ applyStreakLogic(state.zikir); }
+  saveState();
+  renderZikir();
+}
+function setZikirGoal(g){ state.zikir.goal = g; saveState(); renderZikir(); }
+function resetZikir(){ state.zikir.count = 0; saveState(); renderZikir(); }
+function saveZikirSession(){
+  if(state.zikir.count <= 0) return;
+  const labelInput = document.getElementById('zikirLabel');
+  const label = labelInput.value.trim() || 'Zikir';
+  state.zikir.history.unshift({ date: new Date().toISOString(), label, count: state.zikir.count });
+  if(state.zikir.history.length > 50) state.zikir.history.length = 50;
+  state.zikir.count = 0;
+  labelInput.value = '';
+  saveState();
+  renderZikir();
+  renderZikirHistory();
+}
+function deleteZikirEntry(idx){
+  state.zikir.history.splice(idx,1);
+  saveState();
+  renderZikirHistory();
+}
+function renderZikirHistory(){
+  const wrap = document.getElementById('zikirHistory');
+  if(!wrap) return;
+  if(state.zikir.history.length === 0){
+    wrap.innerHTML = '';
+    return;
+  }
+  wrap.innerHTML = state.zikir.history.map((h,i)=>{
+    const d = new Date(h.date);
+    const dateStr = d.toLocaleDateString('tr-TR', {day:'numeric', month:'short'}) + ' · ' + d.toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'});
+    return `<div class="nstep zh-item">
+      <div class="zcount">${h.count}</div>
+      <div class="zinfo">
+        <div class="zlabel">${escapeHtml(h.label)}</div>
+        <div class="zdate">${dateStr}</div>
+      </div>
+      <button class="zdel" onclick="deleteZikirEntry(${i})">✕</button>
+    </div>`;
+  }).join('');
+}
+
+/* ---------- kıble yönü ---------- */
+const KAABA_LAT = 21.4225, KAABA_LNG = 39.8262;
+let qiblaBearing = null, qiblaHeadingActive = false;
+function computeBearing(lat1, lng1, lat2, lng2){
+  const toRad = d=>d*Math.PI/180, toDeg = r=>r*180/Math.PI;
+  const dLng = toRad(lng2-lng1);
+  const y = Math.sin(dLng) * Math.cos(toRad(lat2));
+  const x = Math.cos(toRad(lat1))*Math.sin(toRad(lat2)) - Math.sin(toRad(lat1))*Math.cos(toRad(lat2))*Math.cos(dLng);
+  return (toDeg(Math.atan2(y,x)) + 360) % 360;
+}
+function startQibla(){
+  const status = document.getElementById('qiblaStatus');
+  const btn = document.getElementById('qiblaBtn');
+  if(window.isSecureContext === false){
+    status.textContent = 'Bu özellik güvenli bir bağlantı (https) gerektiriyor. Dosyayı doğrudan açtığında Safari konum iznini engelliyor olabilir — Vird\'i bir web sunucusundan (ör. iCloud Drive paylaşım linki yerine basit bir hosting) açman gerekebilir.';
+    return;
+  }
+  if(!navigator.geolocation){ status.textContent = 'Cihazın konum servisini desteklemiyor.'; return; }
+  status.textContent = 'Konum alınıyor…';
+  btn.disabled = true;
+  navigator.geolocation.getCurrentPosition(pos=>{
+    btn.disabled = false;
+    qiblaBearing = computeBearing(pos.coords.latitude, pos.coords.longitude, KAABA_LAT, KAABA_LNG);
+    rotateNeedleStatic();
+    status.textContent = 'Kıble açısı: '+Math.round(qiblaBearing)+'° (kuzeyden saat yönünde). Telefonunu kuzeye göre bu açıda tutarsan Kâbe yönüne bakmış olursun.';
+    requestCompass(status, btn);
+  }, err=>{
+    btn.disabled = false;
+    if(err.code === 1) status.textContent = 'Konum izni reddedildi. Ayarlar > Safari (veya Gizlilik) > Konum Servisleri\'nden izin vermen gerekiyor.';
+    else if(err.code === 2) status.textContent = 'Konum bilgisi alınamadı. Açık havada veya internet/GPS açıkken tekrar dene.';
+    else if(err.code === 3) status.textContent = 'Konum isteği zaman aşımına uğradı. Tekrar dener misin?';
+    else status.textContent = 'Konum alınamadı (kod '+err.code+'). Tekrar dene.';
+  }, { enableHighAccuracy:false, timeout:12000, maximumAge:600000 });
+}
+function rotateNeedleStatic(){
+  if(qiblaBearing === null) return;
+  const needle = document.getElementById('qiblaNeedle');
+  if(needle) needle.style.transform = `translate(-50%,-50%) rotate(${qiblaBearing}deg)`;
+}
+function requestCompass(status, btn){
+  const DOE = window.DeviceOrientationEvent;
+  const attach = ()=>{
+    window.addEventListener('deviceorientationabsolute', onOrient, true);
+    window.addEventListener('deviceorientation', onOrient, true);
+    qiblaHeadingActive = true;
+    status.textContent = 'Telefonu düz tutup yavaşça çevir; ok Kâbe yönünü gösterecek.';
+    btn.style.display = 'none';
+  };
+  if(DOE && typeof DOE.requestPermission === 'function'){
+    DOE.requestPermission().then(res=>{
+      if(res === 'granted') attach();
+      else status.textContent = 'Pusula izni verilmedi. Kıble açısı: '+Math.round(qiblaBearing)+'° (kuzeyden saat yönünde) — ok bu açıya sabitlendi.';
+    }).catch(()=>{ status.textContent = 'Pusula izni alınamadı. Kıble açısı: '+Math.round(qiblaBearing)+'° (kuzeyden saat yönünde) — ok bu açıya sabitlendi.'; });
+  } else if(DOE){
+    attach();
+  } else {
+    status.textContent = 'Cihazın pusulayı desteklemiyor. Kıble açısı: '+Math.round(qiblaBearing)+'° (kuzeyden saat yönünde) — ok bu açıya sabitlendi.';
+  }
+}
+function onOrient(e){
+  if(qiblaBearing === null) return;
+  let heading = null;
+  if(typeof e.webkitCompassHeading === 'number'){ heading = e.webkitCompassHeading; }
+  else if(e.alpha !== null){ heading = 360 - e.alpha; }
+  if(heading === null) return;
+  const rotation = (qiblaBearing - heading + 360) % 360;
+  const needle = document.getElementById('qiblaNeedle');
+  if(needle) needle.style.transform = `translate(-50%,-50%) rotate(${rotation}deg)`;
+}
+
+/* ---------- kaydettiklerim ---------- */
+function renderFavorites(){
+  const wrap = document.getElementById('favoritesList');
+  const keys = Object.keys(state.feed.favorites).filter(k=>state.feed.favorites[k] && k.startsWith('item_'));
+  if(keys.length === 0){
+    wrap.innerHTML = '<div class="card" style="text-align:center; color:var(--ink-dim); font-size:13px;">Henüz kalp ile kaydettiğin bir ayet, hadis veya bilgi yok. Akış\'tan beğendiklerini kaydedebilirsin.</div>';
+    return;
+  }
+  wrap.innerHTML = keys.map(k=>{
+    const gIdx = parseInt(k.split('_')[1], 10);
+    const item = FEED_ITEMS[gIdx];
+    if(!item) return '';
+    return `<div class="nstep fav-item">
+      <div class="ftxt">
+        <div class="fcat">${catLabel(item.type)}</div>
+        <div class="fbody">${escapeHtml(item.body)}</div>
+        ${item.ref ? `<div class="fref">${escapeHtml(item.ref)}</div>` : ''}
+      </div>
+      <button class="funfav" onclick="unfavFromList('${k}')">♥</button>
+    </div>`;
+  }).join('');
+}
+function unfavFromList(key){
+  state.feed.favorites[key] = false;
+  saveState();
+  renderFavorites();
+}
+
+/* ---------- init ---------- */
+function safeInit(name, fn){
+  try{ fn(); }catch(e){ console.error('Init failed:', name, e); }
+}
+safeInit('renderHero', renderHero);
+safeInit('renderDualar', renderDualar);
+safeInit('renderOgretiler', renderOgretiler);
+safeInit('renderFeed', renderFeed);
+safeInit('renderEsmaToday', renderEsmaToday);
+safeInit('renderEsmaList', renderEsmaList);
+safeInit('renderNamaz', renderNamaz);
+safeInit('renderKisaSureler', renderKisaSureler);
+safeInit('renderZikir', renderZikir);
+safeInit('renderZikirHistory', renderZikirHistory);
+safeInit('renderFavorites', renderFavorites);
+</script>
+</body>
+</html>
