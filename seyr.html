@@ -100,27 +100,19 @@
   }
   .feed-subnav .fsub.active{ background:var(--sage-dark); color:#F3EFE3; border-color:var(--sage-dark); }
   .feed-head{ display:flex; align-items:center; justify-content:space-between; padding:12px 0 10px; }
-  .feed-progress{ display:flex; gap:4px; flex:1; flex-wrap:wrap; }
-  .feed-progress .dot{ width:6px; height:6px; border-radius:50%; background:var(--line); }
-  .feed-progress .dot.seen{ background:var(--gold); }
+  .feed-count{ font-size:12px; color:var(--ink-dim); }
   .feed-streak{ font-size:12px; color:var(--ember); white-space:nowrap; margin-left:10px; font-weight:700; }
-  .feed-scroll{
-    height:55vh; min-height:380px; max-height:480px; overflow-y:auto; scroll-snap-type:y mandatory;
-    -webkit-overflow-scrolling:touch; overscroll-behavior-y:auto;
-    border-radius:var(--radius); border:1px solid var(--line);
-  }
+  .feed-scroll{ display:flex; flex-direction:column; gap:12px; }
   .feed-card{
-    scroll-snap-align:start; height:55vh; min-height:380px; max-height:480px;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding:36px 26px; position:relative; text-align:center;
+    border-radius:var(--radius); padding:30px 24px; position:relative; text-align:center;
   }
-  .feed-card .cat{ font-size:11px; letter-spacing:2px; text-transform:uppercase; margin-bottom:18px; font-weight:700; }
-  .feed-card .body{ font-family:'Newsreader', serif; font-style:italic; font-size:21px; line-height:1.65; }
-  .feed-card .note{ margin-top:16px; font-size:14.5px; opacity:0.8; font-family:'Vazirmatn'; font-style:normal; }
-  .feed-card .ref{ margin-top:14px; font-size:11.5px; opacity:0.65; letter-spacing:0.5px; font-family:'Vazirmatn'; font-style:normal; }
+  .feed-card .cat{ font-size:11px; letter-spacing:2px; text-transform:uppercase; margin-bottom:14px; font-weight:700; }
+  .feed-card .body{ font-family:'Newsreader', serif; font-style:italic; font-size:20px; line-height:1.6; }
+  .feed-card .note{ margin-top:14px; font-size:14.5px; opacity:0.8; font-family:'Vazirmatn'; font-style:normal; }
+  .feed-card .ref{ margin-top:12px; font-size:11.5px; opacity:0.65; letter-spacing:0.5px; font-family:'Vazirmatn'; font-style:normal; }
   .feed-card .fav{
-    position:absolute; top:18px; right:18px; background:rgba(255,255,255,0.5); border:none;
-    width:38px; height:38px; border-radius:50%; font-size:17px; cursor:pointer; color:var(--ink);
+    position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.5); border:none;
+    width:36px; height:36px; border-radius:50%; font-size:16px; cursor:pointer; color:var(--ink);
   }
   .feed-card .fav.active{ color:var(--ember); }
   .feed-card.t-ayet{ background:linear-gradient(165deg, #E5ECDB, #D2DEC4); color:var(--sage-dark); }
@@ -130,8 +122,8 @@
   .feed-card.t-dua{ background:linear-gradient(165deg, #DCE5EA, #C7D6DE); color:#4E6378; }
   .feed-card.t-sunnet{ background:linear-gradient(165deg, #E2E8D6, #CEDABF); color:#56683F; }
   .feed-card.t-fazilet{ background:linear-gradient(165deg, #F0DCE2, #E3C2CC); color:#94495C; }
-  .feed-card.t-end{ background:linear-gradient(165deg, #4F6149, #36452F); color:#F3EFE3; }
-  .feed-card.t-end .big-mark{ font-family:'Newsreader', serif; font-style:italic; font-size:26px; color:#F3EFE3; margin-bottom:14px; }
+  .feed-card.t-end{ background:linear-gradient(165deg, #4F6149, #36452F); color:#F3EFE3; padding:34px 24px; }
+  .feed-card.t-end .big-mark{ font-family:'Newsreader', serif; font-style:italic; font-size:24px; color:#F3EFE3; margin-bottom:12px; }
   .more-btn{
     margin-top:18px; max-width:220px; padding:12px 18px; border-radius:14px; border:1px solid rgba(255,255,255,0.4);
     background:rgba(255,255,255,0.12); color:#F3EFE3; font-weight:700; font-size:13.5px; cursor:pointer; font-family:inherit;
@@ -171,23 +163,6 @@
   .grp-title{ font-family:'Newsreader', serif; font-style:italic; font-size:16.5px; color:var(--gold-soft); margin:24px 0 10px; }
   .grp-title:first-child{ margin-top:6px; }
 
-  /* qibla */
-  .qibla-card{ text-align:center; }
-  .qibla-wrap{ display:flex; justify-content:center; padding:10px 0 6px; }
-  .qibla-compass{
-    width:160px; height:160px; border-radius:50%; position:relative;
-    background:radial-gradient(circle, #FBF9F2, #ECE6D5);
-    border:1px solid var(--line); transition:transform .3s ease;
-  }
-  .qibla-n{
-    position:absolute; top:10px; left:50%; transform:translateX(-50%);
-    font-size:11px; font-weight:700; color:var(--ink-dim);
-  }
-  .qibla-needle{
-    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-    font-size:30px; transition:transform .25s ease;
-  }
-  .qibla-status{ font-size:12.5px; color:var(--ink-dim); margin:8px 0 14px; line-height:1.5; }
   .locate-btn{
     width:100%; padding:12px; border-radius:14px; border:1px solid var(--line);
     background:var(--bg-soft); color:var(--sage-dark); font-weight:700; font-size:13.5px; cursor:pointer; font-family:inherit;
@@ -285,7 +260,7 @@
         <button class="fsub" data-ftype="hadis" onclick="switchFeedType('hadis')">Hadis</button>
         <button class="fsub" data-ftype="terim" onclick="switchFeedType('terim')">Sözlük</button>
       </div>
-      <div class="feed-head"><div class="feed-progress" id="feedProgress"></div></div>
+      <div class="feed-head"><div class="feed-count" id="feedCount"></div></div>
       <div class="feed-scroll" id="feedScroll"></div>
     </div>
 
@@ -346,19 +321,7 @@
 
   <!-- ARAÇLAR -->
   <section class="panel" id="panel-araclar">
-    <div class="page-head"><div class="eyebrow">Araçlar</div><h2>Kıble, Zikir, Kayıtlar</h2></div>
-
-    <div class="grp-title">Kıble Yönü</div>
-    <div class="card qibla-card">
-      <div class="qibla-wrap">
-        <div class="qibla-compass" id="qiblaCompass">
-          <div class="qibla-n">K</div>
-          <div class="qibla-needle" id="qiblaNeedle">🕋</div>
-        </div>
-      </div>
-      <div class="qibla-status" id="qiblaStatus">Kıble yönünü görmek için konum ve pusula erişimine izin ver.</div>
-      <button class="locate-btn" id="qiblaBtn" onclick="startQibla()">Kıbleyi Bul</button>
-    </div>
+    <div class="page-head"><div class="eyebrow">Araçlar</div><h2>Zikir, Kayıtlar</h2></div>
 
     <div class="grp-title">Zikir</div>
     <div class="card zikir-card">
@@ -425,6 +388,23 @@ function loadState(){
 function saveState(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
 let state = loadState();
 if(!state.feed){ state.feed = { favorites:{}, streak:0, lastDone:null, extra:0 }; saveState(); }
+function migrateFavorites(){
+  let changed = false;
+  Object.keys(state.feed.favorites||{}).forEach(k=>{
+    const v = state.feed.favorites[k];
+    if(v === true || v === false){
+      if(v === true && k.startsWith('item_')){
+        const gIdx = parseInt(k.split('_')[1], 10);
+        const item = FEED_ITEMS[gIdx];
+        state.feed.favorites[k] = item ? { active:true, type:item.type, body:item.body, ref:item.ref||'' } : { active:false };
+      } else {
+        state.feed.favorites[k] = { active:false };
+      }
+      changed = true;
+    }
+  });
+  if(changed) saveState();
+}
 if(!state.zikir){ state.zikir = { count:0, goal:33, date:null, streak:0, lastDone:null, history:[] }; saveState(); }
 if(!state.zikir.history){ state.zikir.history = []; saveState(); }
 
@@ -470,7 +450,7 @@ function quickTile(target, ftype){
 }
 
 /* ===================== FEED ===================== */
-const FEED_ITEMS = [
+let FEED_ITEMS = [
   {type:'ayet', tl:'İnne mea\'l-usri yüsrâ', body:'Şüphesiz, zorlukla beraber bir kolaylık vardır.', ref:'İnşirah Sûresi, 6'},
   {type:'ayet', tl:'Ve beşşiri\'s-sâbirîn', body:'Sabredenleri müjdele.', ref:'Bakara Sûresi, 155'},
   {type:'ayet', tl:'Fezkürûnî ezkürküm', body:'Öyleyse siz beni anın ki ben de sizi anayım.', ref:'Bakara Sûresi, 152'},
@@ -504,6 +484,26 @@ const FEED_ITEMS = [
   {type:'ayet', body:'Allah, tevbe edenleri ve temizlenenleri sever.', ref:'Bakara Sûresi, 222'},
   {type:'ayet', body:'Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver, bizi ateş azabından koru.', ref:'Bakara Sûresi, 201'},
   {type:'ayet', body:'Dünya hayatı, ancak bir oyun ve oyalanmadır; ahiret yurdu ise gerçek hayatın ta kendisidir.', ref:'Ankebût Sûresi, 64'},
+  {type:'ayet', body:'İnsan için ancak çalıştığının karşılığı vardır.', ref:'Necm Sûresi, 39'},
+  {type:'ayet', body:'Kim bir cana kıymamış birini öldürürse, sanki bütün insanları öldürmüş gibidir; kim de bir canı kurtarırsa bütün insanları kurtarmış gibidir.', ref:'Mâide Sûresi, 32'},
+  {type:'ayet', body:'Sizi farklı kavim ve kabileler kıldık ki birbirinizi tanıyasınız; Allah katında en üstününüz, takvaca en ileride olanınızdır.', ref:'Hucurât Sûresi, 13'},
+  {type:'ayet', body:'Yeryüzünde böbürlenerek yürüme; çünkü sen ne yeri yarabilir ne de boyca dağlara erişebilirsin.', ref:'İsrâ Sûresi, 37'},
+  {type:'ayet', body:'Sözünüzü gizleseniz de açığa vursanız da Allah, kalplerde olanı bilir.', ref:'Mülk Sûresi, 13'},
+  {type:'ayet', body:'Kim sabreder ve bağışlarsa, şüphesiz bu, azmedilmeye değer işlerdendir.', ref:'Şûrâ Sûresi, 43'},
+  {type:'ayet', body:'Mallarınız ve evlatlarınız ancak bir imtihandır.', ref:'Teğâbün Sûresi, 15'},
+  {type:'ayet', body:'Kim Allah\'a karşı sorumluluk bilinciyle yaşarsa, Allah ona bir çıkış yolu ihsan eder.', ref:'Talâk Sûresi, 2'},
+  {type:'ayet', body:'Şüphesiz biz insanı zorluklarla iç içe yarattık.', ref:'Beled Sûresi, 4'},
+  {type:'ayet', body:'Allah sizin için kolaylık diler, zorluk dilemez.', ref:'Bakara Sûresi, 185'},
+  {type:'ayet', body:'Birbirinizin kusurlarını araştırmayın, kimse kimseyi arkasından çekiştirmesin.', ref:'Hucurât Sûresi, 12'},
+  {type:'ayet', body:'Müminler ancak, Allah anıldığında kalpleri ürperen kimselerdir.', ref:'Enfâl Sûresi, 2'},
+  {type:'ayet', body:'Kim zerre miktarı hayır işlerse, onu görür.', ref:'Zilzâl Sûresi, 7'},
+  {type:'ayet', body:'Kim zerre miktarı kötülük işlerse, onu görür.', ref:'Zilzâl Sûresi, 8'},
+  {type:'ayet', body:'Allah\'ın nimetini saymaya kalksanız, onu sayamazsınız.', ref:'Nahl Sûresi, 18'},
+  {type:'ayet', body:'Şüphesiz bu Kur\'an, en doğru olan yola iletir.', ref:'İsrâ Sûresi, 9'},
+  {type:'ayet', body:'De ki: Ey kendi aleyhlerine aşırı giden kullarım! Allah\'ın rahmetinden ümit kesmeyin; şüphesiz Allah bütün günahları bağışlar.', ref:'Zümer Sûresi, 53'},
+  {type:'ayet', body:'Rahmân\'ın has kulları, yeryüzünde tevazu ile yürüyen kimselerdir.', ref:'Furkân Sûresi, 63'},
+  {type:'ayet', body:'Yürüyüşünde tabii ol, sesini alçalt.', ref:'Lokmân Sûresi, 19'},
+  {type:'ayet', body:'Gerçekten müminler kurtuluşa ermiştir; onlar namazlarında derin bir saygı ve huşû içindedirler.', ref:'Mü\'minûn Sûresi, 1-2'},
 
   {type:'hadis', tl:'İnnemâ\'l-a\'mâlü bi\'n-niyyât', body:'Ameller ancak niyetlere göredir.', ref:'Buhârî, Bedü\'l-Vahy, 1'},
   {type:'hadis', tl:'Ed-dînü\'n-nasîhah', body:'Din nasihattir.', ref:'Müslim, Îmân, 95'},
@@ -531,6 +531,26 @@ const FEED_ITEMS = [
   {type:'hadis', body:'Sadaka, malı eksiltmez.', ref:'Müslim, Birr, 69'},
   {type:'hadis', body:'Kim Allah için tevazu gösterirse, Allah onu yükseltir.', ref:'Müslim, Birr, 69'},
   {type:'hadis', body:'Mümin, başına gelen her şeyde hayırla karşılanır; bu yalnız mümine has bir özelliktir.', ref:'Müslim, Zühd, 64'},
+  {type:'hadis', body:'Temizlik, imanın yarısıdır.', ref:'Müslim, Tahâret, 1'},
+  {type:'hadis', body:'Dünyada bir yolcu ya da bir garip gibi ol.', ref:'Buhârî, Rikak, 23'},
+  {type:'hadis', body:'Akrabalık bağını kesen kimse cennete giremez.', ref:'Buhârî, Edeb, 13'},
+  {type:'hadis', body:'Kıyamet günü mizanda en ağır gelecek şey güzel ahlaktır.', ref:'Tirmizî, Birr, 82'},
+  {type:'hadis', body:'Ameller, sonuçlarına göre değerlendirilir.', ref:'Buhârî, Rikak, 33'},
+  {type:'hadis', body:'Bir topluluk Allah\'ı anmak için bir araya gelirse, melekler onları kuşatır ve üzerlerine rahmet iner.', ref:'Müslim, Zikir, 38'},
+  {type:'hadis', body:'Dua, ibadetin özüdür.', ref:'Tirmizî, Daavât, 1'},
+  {type:'hadis', body:'Cuma gününde öyle bir an vardır ki, o anda yapılan dua kabul olur.', ref:'Buhârî, Cuma, 37'},
+  {type:'hadis', body:'Namazını bekleyen kişiye melekler, namaza durana kadar dua eder durur.', ref:'Müslim, Mesâcid, 251'},
+  {type:'hadis', body:'Yalan söylemek, münafıklık alametlerindendir.', ref:'Buhârî, Şehâdât, 9'},
+  {type:'hadis', body:'Kibir, hakkı kabul etmemek ve insanları küçümsemektir.', ref:'Müslim, Îmân, 147'},
+  {type:'hadis', body:'Kıyamet günü kul, ömrünü nerede tükettiğinden sorulmadan bir adım atamaz.', ref:'Tirmizî, Kıyâme, 25'},
+  {type:'hadis', body:'Allah yolunda bir günlük nöbet, dünyadan ve içindekilerden daha hayırlıdır.', ref:'Buhârî, Cihâd, 102'},
+  {type:'hadis', body:'Söz taşıyan (koğuculuk yapan) kimse cennete giremez.', ref:'Buhârî, Edeb, 27'},
+  {type:'hadis', body:'Kim bir müminin sıkıntısını giderirse, Allah da kıyamet günündeki sıkıntılarından birini ondan giderir.', ref:'Tirmizî, Birr, 19'},
+  {type:'hadis', body:'Şaka bile olsa yalan söylemeyin, sözünüzü tutun.', ref:'Ebû Dâvûd, Edeb, 80'},
+  {type:'hadis', body:'Komşusu kendisinden güvende olmayan kimse, tam anlamıyla iman etmiş sayılmaz.', ref:'Buhârî, Edeb, 29'},
+  {type:'hadis', body:'Kıyamet kopuyor olsa bile, elinizdeki fidanı dikmeye çalışın.', ref:'Buhârî, Edeb (el-Edebü\'l-Müfred), 479'},
+  {type:'hadis', body:'Çok gülmekten sakının; çünkü çok gülmek kalbi öldürür.', ref:'Tirmizî, Zühd, 25'},
+  {type:'hadis', body:'Allah ilmi, kullarının elinden zorla çekip almaz; ilmi, alimleri vefat ettirerek azaltır.', ref:'Buhârî, İlim, 34'},
 
   {type:'terim', body:'Tevekkül', note:'Çalışıp gerekli sebeplere sarıldıktan sonra sonucu Allah\'a bırakmak. Tembellik değil, güven duygusudur.'},
   {type:'terim', body:'Takva', note:'Allah\'a karşı sorumluluk bilinci; kalbin sürekli Allah\'ın gözetiminde olduğunu hissetmesi.'},
@@ -589,6 +609,80 @@ function dateSeed(){
 }
 const FEED_STACK_SIZE = 14;
 let feedStack = [];
+
+/* ---------- canlı içerik: tüm Kur'an + binlerce hadis ---------- */
+const SURAH_AYAH_COUNTS = [7,286,200,176,120,165,206,75,129,109,123,111,43,52,99,128,111,110,98,135,112,78,118,64,77,227,93,88,69,60,34,30,73,54,45,83,182,88,75,85,54,53,89,59,37,35,38,29,18,45,60,49,62,55,78,96,29,22,24,13,14,11,11,18,12,12,30,52,52,44,28,28,20,56,40,31,50,40,46,42,29,19,36,25,22,17,19,26,30,20,15,21,11,8,8,19,5,8,8,11,11,8,3,9,5,4,7,3,6,3,5,4,5,6];
+const SURAH_NAMES_TR = ["Fâtiha","Bakara","Âl-i İmrân","Nisâ","Mâide","En'âm","A'râf","Enfâl","Tevbe","Yûnus","Hûd","Yûsuf","Ra'd","İbrâhîm","Hicr","Nahl","İsrâ","Kehf","Meryem","Tâhâ","Enbiyâ","Hac","Mü'minûn","Nûr","Furkân","Şuarâ","Neml","Kasas","Ankebût","Rûm","Lokmân","Secde","Ahzâb","Sebe","Fâtır","Yâsîn","Sâffât","Sâd","Zümer","Mü'min","Fussilet","Şûrâ","Zuhruf","Duhân","Câsiye","Ahkâf","Muhammed","Fetih","Hucurât","Kâf","Zâriyât","Tûr","Necm","Kamer","Rahmân","Vâkıa","Hadîd","Mücâdele","Haşr","Mümtehine","Saf","Cuma","Münâfikûn","Teğâbün","Talâk","Tahrîm","Mülk","Kalem","Hâkka","Meâric","Nûh","Cin","Müzzemmil","Müddessir","Kıyâme","İnsân","Mürselât","Nebe","Nâziât","Abese","Tekvîr","İnfitâr","Mutaffifîn","İnşikâk","Bürûc","Târık","A'lâ","Gâşiye","Fecr","Beled","Şems","Leyl","Duhâ","İnşirâh","Tîn","Alak","Kadr","Beyyine","Zilzâl","Âdiyât","Kâria","Tekâsür","Asr","Hümeze","Fîl","Kureyş","Mâûn","Kevser","Kâfirûn","Nasr","Tebbet","İhlâs","Felak","Nâs"];
+const HADITH_BOOKS_TUR = [
+  {key:'abudawud', name:'Ebû Dâvûd', max:5274},
+  {key:'tirmidhi', name:'Tirmizî', max:3900},
+  {key:'ibnmajah', name:'İbn Mâce', max:4300}
+];
+
+function randInt(max){ return 1 + Math.floor(Math.random()*max); }
+function pickRandomAyahRef(){
+  // ayah sayısına göre ağırlıklı rastgele sure seçimi (her ayetin eşit ihtimali olsun diye)
+  let r = randInt(6236);
+  let surah = 1;
+  for(let i=0;i<SURAH_AYAH_COUNTS.length;i++){
+    if(r <= SURAH_AYAH_COUNTS[i]){ surah = i+1; break; }
+    r -= SURAH_AYAH_COUNTS[i];
+  }
+  const ayah = r;
+  return { surah, ayah };
+}
+async function fetchOneAyet(){
+  const {surah, ayah} = pickRandomAyahRef();
+  const url = `https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/tur-diyanetisleri/${surah}/${ayah}.json`;
+  const res = await fetch(url);
+  if(!res.ok) throw new Error('ayet fetch failed');
+  const data = await res.json();
+  if(!data || !data.text) throw new Error('ayet boş');
+  return { type:'ayet', body: data.text, ref: SURAH_NAMES_TR[surah-1]+' Sûresi, '+ayah, key:'live_ayet_'+surah+'_'+ayah };
+}
+async function fetchOneHadis(){
+  const book = HADITH_BOOKS_TUR[Math.floor(Math.random()*HADITH_BOOKS_TUR.length)];
+  const num = randInt(book.max);
+  const url = `https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/tur-${book.key}/${num}.json`;
+  const res = await fetch(url);
+  if(!res.ok) throw new Error('hadis fetch failed');
+  const data = await res.json();
+  const h = data && data.hadiths && data.hadiths[0];
+  if(!h || !h.text || h.text.trim().length < 5) throw new Error('hadis boş');
+  return { type:'hadis', body: h.text, ref: book.name+', No. '+num, key:'live_hadis_'+book.key+'_'+num };
+}
+async function fetchManyWithRetry(fetchFn, count, maxAttempts){
+  const results = [];
+  const seen = new Set();
+  let attempts = 0;
+  while(results.length < count && attempts < maxAttempts){
+    attempts++;
+    try{
+      const item = await fetchFn();
+      if(!seen.has(item.key)){ seen.add(item.key); results.push(item); }
+    }catch(e){ /* bu deneme başarısız oldu, devam et */ }
+  }
+  return results;
+}
+async function upgradeFeedWithLiveContent(type){
+  const fetchFn = type === 'ayet' ? fetchOneAyet : fetchOneHadis;
+  let liveItems;
+  try{
+    liveItems = await fetchManyWithRetry(fetchFn, 16, 30);
+  }catch(e){ return; }
+  if(!liveItems || liveItems.length < 5) return; // yeterli gelmediyse yerel listeyi koru
+  if(currentFeedType !== type) return; // kullanıcı bu sırada sekme değiştirmiş olabilir
+  const scroll = document.getElementById('feedScroll');
+  document.getElementById('feedCount').textContent = liveItems.length + ' içerik (canlı)';
+  scroll.innerHTML = liveItems.map(it=>feedCardHtml(it, it.key)).join('')
+    + `<div class="feed-card t-end" id="feedEnd">
+        <div class="big-mark">Bugünlük bu kadar</div>
+        <div class="body">Yarın yeni bir akış seni bekliyor. İstersen birkaç tane daha görebilirsin.</div>
+        <button class="more-btn" onclick="renderFeed()">Yeniden karıştır</button>
+        <button class="more-btn" id="completeBtn" onclick="completeFeedToday()" style="margin-top:10px;">Bugünü tamamladım</button>
+      </div>`;
+  updateFeedStreakLabel();
+}
 let currentFeedType = 'ayet';
 function switchFeedType(type){
   currentFeedType = type;
@@ -607,11 +701,11 @@ function buildFeedStack(){
 function catLabel(type){
   return {ayet:'Ayet', hadis:'Hadis', terim:'Sözlük', kissa:'Kıssa', dua:'Dua', sunnet:'Sünnet', fazilet:'Fazilet'}[type] || '';
 }
-function feedCardHtml(item, gIdx, posIdx){
-  const favKey = 'item_'+gIdx;
-  const isFav = !!state.feed.favorites[favKey];
-  return `<div class="feed-card t-${item.type}" data-pos="${posIdx}">
-    <button class="fav ${isFav?'active':''}" onclick="toggleFav('${favKey}', this)">${isFav?'♥':'♡'}</button>
+function escAttr(s){ return String(s).replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function feedCardHtml(item, key){
+  const isFav = !!(state.feed.favorites[key] && state.feed.favorites[key].active);
+  return `<div class="feed-card t-${item.type}">
+    <button class="fav ${isFav?'active':''}" data-key="${escAttr(key)}" data-type="${escAttr(item.type)}" data-body="${escAttr(item.body)}" data-ref="${escAttr(item.ref||'')}" onclick="toggleFavBtn(this)">${isFav?'♥':'♡'}</button>
     <div class="cat">${catLabel(item.type)}</div>
     <div class="body">${escapeHtml(item.body)}</div>
     ${item.note ? `<div class="note">${escapeHtml(item.note)}</div>` : ''}
@@ -621,45 +715,47 @@ function feedCardHtml(item, gIdx, posIdx){
 function renderFeed(){
   buildFeedStack();
   const scroll = document.getElementById('feedScroll');
-  const progress = document.getElementById('feedProgress');
-  progress.innerHTML = feedStack.map((_,i)=>`<div class="dot" id="fdot-${i}"></div>`).join('');
-  scroll.innerHTML = feedStack.map((itemIdx,i)=>feedCardHtml(FEED_ITEMS[itemIdx], itemIdx, i)).join('')
+  document.getElementById('feedCount').textContent = feedStack.length + ' içerik';
+  scroll.innerHTML = feedStack.map((itemIdx)=>feedCardHtml(FEED_ITEMS[itemIdx], 'item_'+itemIdx)).join('')
     + `<div class="feed-card t-end" id="feedEnd">
         <div class="big-mark">Bugünlük bu kadar</div>
         <div class="body">Yarın yeni bir akış seni bekliyor. İstersen birkaç tane daha görebilirsin.</div>
         <button class="more-btn" onclick="extendFeed()">Birkaç tane daha göster</button>
+        <button class="more-btn" id="completeBtn" onclick="completeFeedToday()" style="margin-top:10px;">Bugünü tamamladım</button>
       </div>`;
-  document.getElementById('feedStreak').textContent = state.feed.streak>0 ? '🔥 '+state.feed.streak+' gün' : '';
-  try{ setupFeedObserver(); }catch(e){ console.error('Feed observer failed', e); }
+  updateFeedStreakLabel();
+  if(currentFeedType === 'ayet' || currentFeedType === 'hadis'){
+    upgradeFeedWithLiveContent(currentFeedType);
+  }
+}
+function updateFeedStreakLabel(){
+  const el = document.getElementById('feedStreak');
+  if(el) el.textContent = state.feed.streak>0 ? '🔥 '+state.feed.streak+' gün' : '';
+  const btn = document.getElementById('completeBtn');
+  if(btn){
+    const done = state.feed.lastDone === todayStr();
+    btn.textContent = done ? 'Bugün için tamamlandı ✓' : 'Bugünü tamamladım';
+  }
+}
+function completeFeedToday(){
+  if(applyStreakLogic(state.feed)){ saveState(); }
+  updateFeedStreakLabel();
 }
 function extendFeed(){
   state.feed.extra = (state.feed.extra||0) + 3;
   saveState();
   renderFeed();
 }
-function toggleFav(key, btn){
-  state.feed.favorites[key] = !state.feed.favorites[key];
+function toggleFavBtn(btn){
+  const key = btn.dataset.key;
+  const existing = state.feed.favorites[key];
+  const nowActive = !(existing && existing.active);
+  state.feed.favorites[key] = nowActive
+    ? { active:true, type:btn.dataset.type, body:btn.dataset.body, ref:btn.dataset.ref }
+    : { active:false, type:btn.dataset.type, body:btn.dataset.body, ref:btn.dataset.ref };
   saveState();
-  btn.classList.toggle('active');
-  btn.textContent = state.feed.favorites[key] ? '♥' : '♡';
-}
-let feedObserver = null;
-function setupFeedObserver(){
-  if(typeof IntersectionObserver === 'undefined') return;
-  if(feedObserver) feedObserver.disconnect();
-  feedObserver = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting && e.intersectionRatio > 0.6){
-        if(e.target.id === 'feedEnd'){
-          if(applyStreakLogic(state.feed)){ saveState(); document.getElementById('feedStreak').textContent = '🔥 '+state.feed.streak+' gün'; }
-        } else {
-          const dot = document.getElementById('fdot-'+e.target.dataset.pos);
-          if(dot) dot.classList.add('seen');
-        }
-      }
-    });
-  }, {root: document.getElementById('feedScroll'), threshold:0.6});
-  document.querySelectorAll('.feed-card').forEach(c=>feedObserver.observe(c));
+  btn.classList.toggle('active', nowActive);
+  btn.textContent = nowActive ? '♥' : '♡';
 }
 
 /* ===================== ESMA-ÜL HÜSNA ===================== */
@@ -1029,108 +1125,62 @@ function renderZikirHistory(){
   }).join('');
 }
 
-/* ---------- kıble yönü ---------- */
-const KAABA_LAT = 21.4225, KAABA_LNG = 39.8262;
-let qiblaBearing = null, qiblaHeadingActive = false;
-function computeBearing(lat1, lng1, lat2, lng2){
-  const toRad = d=>d*Math.PI/180, toDeg = r=>r*180/Math.PI;
-  const dLng = toRad(lng2-lng1);
-  const y = Math.sin(dLng) * Math.cos(toRad(lat2));
-  const x = Math.cos(toRad(lat1))*Math.sin(toRad(lat2)) - Math.sin(toRad(lat1))*Math.cos(toRad(lat2))*Math.cos(dLng);
-  return (toDeg(Math.atan2(y,x)) + 360) % 360;
-}
-function startQibla(){
-  const status = document.getElementById('qiblaStatus');
-  const btn = document.getElementById('qiblaBtn');
-  if(window.isSecureContext === false){
-    status.textContent = 'Bu özellik güvenli bir bağlantı (https) gerektiriyor. Dosyayı doğrudan açtığında Safari konum iznini engelliyor olabilir — Vird\'i bir web sunucusundan (ör. iCloud Drive paylaşım linki yerine basit bir hosting) açman gerekebilir.';
-    return;
-  }
-  if(!navigator.geolocation){ status.textContent = 'Cihazın konum servisini desteklemiyor.'; return; }
-  status.textContent = 'Konum alınıyor…';
-  btn.disabled = true;
-  navigator.geolocation.getCurrentPosition(pos=>{
-    btn.disabled = false;
-    qiblaBearing = computeBearing(pos.coords.latitude, pos.coords.longitude, KAABA_LAT, KAABA_LNG);
-    rotateNeedleStatic();
-    status.textContent = 'Kıble açısı: '+Math.round(qiblaBearing)+'° (kuzeyden saat yönünde). Telefonunu kuzeye göre bu açıda tutarsan Kâbe yönüne bakmış olursun.';
-    requestCompass(status, btn);
-  }, err=>{
-    btn.disabled = false;
-    if(err.code === 1) status.textContent = 'Konum izni reddedildi. Ayarlar > Safari (veya Gizlilik) > Konum Servisleri\'nden izin vermen gerekiyor.';
-    else if(err.code === 2) status.textContent = 'Konum bilgisi alınamadı. Açık havada veya internet/GPS açıkken tekrar dene.';
-    else if(err.code === 3) status.textContent = 'Konum isteği zaman aşımına uğradı. Tekrar dener misin?';
-    else status.textContent = 'Konum alınamadı (kod '+err.code+'). Tekrar dene.';
-  }, { enableHighAccuracy:false, timeout:12000, maximumAge:600000 });
-}
-function rotateNeedleStatic(){
-  if(qiblaBearing === null) return;
-  const needle = document.getElementById('qiblaNeedle');
-  if(needle) needle.style.transform = `translate(-50%,-50%) rotate(${qiblaBearing}deg)`;
-}
-function requestCompass(status, btn){
-  const DOE = window.DeviceOrientationEvent;
-  const attach = ()=>{
-    window.addEventListener('deviceorientationabsolute', onOrient, true);
-    window.addEventListener('deviceorientation', onOrient, true);
-    qiblaHeadingActive = true;
-    status.textContent = 'Telefonu düz tutup yavaşça çevir; ok Kâbe yönünü gösterecek.';
-    btn.style.display = 'none';
-  };
-  if(DOE && typeof DOE.requestPermission === 'function'){
-    DOE.requestPermission().then(res=>{
-      if(res === 'granted') attach();
-      else status.textContent = 'Pusula izni verilmedi. Kıble açısı: '+Math.round(qiblaBearing)+'° (kuzeyden saat yönünde) — ok bu açıya sabitlendi.';
-    }).catch(()=>{ status.textContent = 'Pusula izni alınamadı. Kıble açısı: '+Math.round(qiblaBearing)+'° (kuzeyden saat yönünde) — ok bu açıya sabitlendi.'; });
-  } else if(DOE){
-    attach();
-  } else {
-    status.textContent = 'Cihazın pusulayı desteklemiyor. Kıble açısı: '+Math.round(qiblaBearing)+'° (kuzeyden saat yönünde) — ok bu açıya sabitlendi.';
-  }
-}
-function onOrient(e){
-  if(qiblaBearing === null) return;
-  let heading = null;
-  if(typeof e.webkitCompassHeading === 'number'){ heading = e.webkitCompassHeading; }
-  else if(e.alpha !== null){ heading = 360 - e.alpha; }
-  if(heading === null) return;
-  const rotation = (qiblaBearing - heading + 360) % 360;
-  const needle = document.getElementById('qiblaNeedle');
-  if(needle) needle.style.transform = `translate(-50%,-50%) rotate(${rotation}deg)`;
-}
 
 /* ---------- kaydettiklerim ---------- */
 function renderFavorites(){
   const wrap = document.getElementById('favoritesList');
-  const keys = Object.keys(state.feed.favorites).filter(k=>state.feed.favorites[k] && k.startsWith('item_'));
-  if(keys.length === 0){
+  const entries = Object.keys(state.feed.favorites)
+    .map(k=>({k, v:state.feed.favorites[k]}))
+    .filter(({v})=> v && v.active);
+  if(entries.length === 0){
     wrap.innerHTML = '<div class="card" style="text-align:center; color:var(--ink-dim); font-size:13px;">Henüz kalp ile kaydettiğin bir ayet, hadis veya bilgi yok. Akış\'tan beğendiklerini kaydedebilirsin.</div>';
     return;
   }
-  wrap.innerHTML = keys.map(k=>{
-    const gIdx = parseInt(k.split('_')[1], 10);
-    const item = FEED_ITEMS[gIdx];
-    if(!item) return '';
+  wrap.innerHTML = entries.map(({k,v})=>{
     return `<div class="nstep fav-item">
       <div class="ftxt">
-        <div class="fcat">${catLabel(item.type)}</div>
-        <div class="fbody">${escapeHtml(item.body)}</div>
-        ${item.ref ? `<div class="fref">${escapeHtml(item.ref)}</div>` : ''}
+        <div class="fcat">${catLabel(v.type)}</div>
+        <div class="fbody">${escapeHtml(v.body||'')}</div>
+        ${v.ref ? `<div class="fref">${escapeHtml(v.ref)}</div>` : ''}
       </div>
-      <button class="funfav" onclick="unfavFromList('${k}')">♥</button>
+      <button class="funfav" onclick="unfavFromList('${escAttr(k)}')">♥</button>
     </div>`;
   }).join('');
 }
 function unfavFromList(key){
-  state.feed.favorites[key] = false;
+  if(state.feed.favorites[key]) state.feed.favorites[key].active = false;
   saveState();
   renderFavorites();
+}
+
+/* ---------- uzaktan içerik güncelleme ---------- */
+function loadRemoteContent(){
+  fetch('content.json', { cache: 'no-store' })
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if(!data) return;
+      let added = 0;
+      ['ayet','hadis','terim','kissa','dua','sunnet','fazilet'].forEach(type=>{
+        if(Array.isArray(data[type])){
+          data[type].forEach(it=>{
+            FEED_ITEMS.push({ type, body: it.body, ref: it.ref, note: it.note });
+            added++;
+          });
+        }
+      });
+      if(added > 0){
+        renderFeed();
+        console.log('Yeni içerik yüklendi:', added);
+      }
+    })
+    .catch(()=>{ /* content.json yoksa veya offline ise sessizce geç */ });
 }
 
 /* ---------- init ---------- */
 function safeInit(name, fn){
   try{ fn(); }catch(e){ console.error('Init failed:', name, e); }
 }
+safeInit('migrateFavorites', migrateFavorites);
 safeInit('renderHero', renderHero);
 safeInit('renderDualar', renderDualar);
 safeInit('renderOgretiler', renderOgretiler);
@@ -1142,6 +1192,7 @@ safeInit('renderKisaSureler', renderKisaSureler);
 safeInit('renderZikir', renderZikir);
 safeInit('renderZikirHistory', renderZikirHistory);
 safeInit('renderFavorites', renderFavorites);
+safeInit('loadRemoteContent', loadRemoteContent);
 </script>
 </body>
 </html>
